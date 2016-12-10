@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "node": true,
+  },
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    "no-unused-vars": [1, { varsIgnorePattern: '^h$' }],
+  },
+  "settings": {
+    "import/core-modules": ['react']
+  }
+}
