@@ -103,8 +103,8 @@ const AppWithStyles = withStyles(() => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  isBootstrapped: state.app.isBootstrapped,
-  isLoggedIn: state.spotify.isLoggedIn,
+  isBootstrapped: state.app.get('isBootstrapped'),
+  isLoggedIn: state.spotify.get('isLoggedIn'),
 });
 
 const mapDispatchToProps = dispatch => (

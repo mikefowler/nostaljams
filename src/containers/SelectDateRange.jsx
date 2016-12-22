@@ -91,8 +91,8 @@ export const SelectDateRangeWithStyles = withStyles(() => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  startDate: state.app.selectedStartDate,
-  endDate: state.app.selectedEndDate,
+  startDate: state.app.get('selectedStartDate'),
+  endDate: state.app.get('selectedEndDate'),
 });
 
 const mapDispatchToProps = dispatch => (

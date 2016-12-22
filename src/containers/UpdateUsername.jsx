@@ -98,7 +98,7 @@ export const UpdateUserNameWithStyles = withStyles(() => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  username: state.lastfm.username,
+  username: state.lastfm.get('username'),
 });
 
 const mapDispatchToProps = dispatch => (

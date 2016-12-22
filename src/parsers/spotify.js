@@ -1,3 +1,6 @@
+// @TODO: remove next line once there are multiple exports
+/* eslint-disable import/prefer-default-export */
+
 import { List } from 'immutable';
 
 import User from '../models/User';

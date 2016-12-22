@@ -1,6 +1,5 @@
-import { List } from 'immutable';
+import { Map, List } from 'immutable';
 
-import Chart from '../models/Chart';
 import ChartMap from '../models/ChartMap';
 
 import {
@@ -14,11 +13,11 @@ import {
   LOGOUT_SUCCEEDED,
 } from '../actions/spotify';
 
-const initialState = {
+const initialState = new Map({
   charts: new ChartMap(),
-  tracks: new List(),
-  username: null,
-};
+  tracks: [],
+  username: '',
+});
 
 export default function reducer(state = initialState, action) {
   const { payload, type } = action;
@@ -27,28 +26,20 @@ export default function reducer(state = initialState, action) {
     case LOGOUT_SUCCEEDED:
       return initialState;
     case USERNAME_UPDATED:
-      return {
-        ...state,
-        username: payload,
-      };
+      return state.set('username', payload);
     case USERNAME_RESET:
-      return {
-        ...state,
+      return state.merge({
         username: null,
         tracks: new List(),
         charts: new ChartMap(),
-      };
+      });
     case FETCH_WEEKLY_CHART_LIST_SUCCEEDED:
-      return {
-        ...state,
-        charts: state.charts.merge(payload),
-      };
+      return state.set('charts', payload);
     case FETCH_WEEKLY_TRACKS_SUCCEEDED:
-      return {
-        ...state,
+      return state.merge({
         tracks: action.payload.entities && action.payload.entities.track,
         artists: action.payload.entities && action.payload.entities.artist,
-      };
+      });
     default:
       return state;
   }

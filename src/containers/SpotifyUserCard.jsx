@@ -50,7 +50,7 @@ export const SpotifyUserCardWithStyles = withStyles(({ unit }) => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  user: state.spotify.user,
+  user: state.spotify.get('user'),
 });
 
 export default connect(mapStateToProps)(SpotifyUserCardWithStyles);

@@ -1,10 +1,5 @@
 import { expect } from 'chai';
-import thunk from 'redux-thunk';
-
-const middlewares = [thunk];
 
 describe('lastfm action creators', () => {
-
-
-
+  expect(1).to.equal(1);
 });

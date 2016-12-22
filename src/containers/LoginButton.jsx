@@ -51,7 +51,7 @@ export const LoginButtonWithStyles = withStyles(() => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.spotify.isLoggedIn,
+  isLoggedIn: state.spotify.get('isLoggedIn'),
 });
 
 const mapDispatchToProps = () => ({

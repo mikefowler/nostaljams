@@ -12,12 +12,12 @@ import SelectDateRange from '../containers/SelectDateRange';
 
 const propTypes = {
   charts: ImmutablePropTypes.orderedMap,
-  selectedCharts: ImmutablePropTypes.orderedMap,
+  selectedCharts: ImmutablePropTypes.seq,
   styles: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
-  selectedCharts: [],
+
 };
 
 // ----------------------------------------------------------------------------
@@ -30,16 +30,14 @@ function ChartList({ charts, selectedCharts, styles }) {
       <h2>Available Charts</h2>
       <SelectDateRange />
       <ul {...css(styles.container)}>
-        {charts.valueSeq().map((chart) => {
+        {selectedCharts && selectedCharts.map((id) => {
+          const chart = charts.get(id);
           const startDate = chart.getStartDate();
           const endDate = chart.getEndDate();
-          const isSelected = selectedCharts.has(chart.id);
-          const formattedRange = `${startDate.format('L')}—${endDate.format('L')}`;
-          const output = isSelected ? <b>{formattedRange}</b> : formattedRange;
 
           return (
             <li key={chart.id}>
-              {output}
+              {startDate.format('L')}—{endDate.format('L')}
             </li>
           );
         })}
@@ -66,7 +64,7 @@ const ChartListWithStyles = withStyles(() => ({
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  charts: state.lastfm.charts,
+  charts: state.lastfm.get('charts'),
   selectedCharts: getChartsInDateRange(state),
 });
 
