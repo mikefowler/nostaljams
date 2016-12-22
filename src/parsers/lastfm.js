@@ -10,7 +10,7 @@ export function parseChart(response) {
 }
 
 export function parseCharts(response) {
-  const charts = response.weeklychartlist && response.weeklychartlist.chart;
+  const { chart: charts } = response;
 
   if (!charts) return new ChartMap();
 

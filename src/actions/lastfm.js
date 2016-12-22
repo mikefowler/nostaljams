@@ -51,13 +51,10 @@ export function fetchWeeklyChartList() {
     dispatch(fetchWeeklyChartListRequested());
 
     // Get the LastFM username from the store Redux store
-    const { username } = getState().lastfm;
+    const user = getState().lastfm.get('username');
 
     // Make a request to the LastFM API
-    return lastfm
-      .get('user.getWeeklyChartList', {
-        user: username,
-      })
+    return lastfm.user.getWeeklyChartList({ user })
       .then((response) => {
         dispatch(fetchWeeklyChartListSucceeded(response));
       })
@@ -90,18 +87,14 @@ function fetchWeeklyTrackChartSucceeded(response) {
   };
 }
 
-export function fetchWeeklyTrackChart(startDate = null, endDate = null) {
+export function fetchWeeklyTrackChart(from = null, to = null) {
   return (dispatch, getState) => {
     dispatch(fetchWeeklyTrackChartRequest());
 
-    const { username } = getState().lastfm;
+    const user = getState().lastfm.get('username');
+    const options = { user, from, to };
 
-    return lastfm
-      .get('user.getweeklytrackchart', {
-        user: username,
-        from: startDate,
-        to: endDate,
-      })
+    return lastfm.user.getWeeklyTrackChart(options)
       .then((response) => {
         let tracks = [];
 

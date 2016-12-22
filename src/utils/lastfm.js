@@ -12,11 +12,43 @@ function request(method = 'GET', endpoint, options) {
   };
 
   const url = `${API_URL}?${qs.stringify(query)}`;
-  return fetch(url).then(response => response.json());
+
+  return new Promise((resolve, reject) => {
+    fetch(url)
+      .then(response => response.json())
+      .then((response) => {
+        let data = response;
+
+        if (method === 'GET') {
+          const key = endpoint.split('.')[1].replace(/^get/, '');
+          data = response[key];
+        }
+
+        resolve(data);
+      })
+      .catch(err => reject(err));
+  });
 }
 
 export default {
-  get(endpoint, options = {}) {
-    return request('GET', endpoint, options);
+
+  user: {
+
+    getWeeklyChartList(options = {}) {
+      return request('GET', 'user.getweeklyalbumchart', options);
+    },
+
+    getWeeklyAlbumChart(options = {}) {
+      return request('GET', 'user.getweeklyalbumchart', options);
+    },
+
+    getWeeklyArtistChart(options = {}) {
+      return request('GET', 'user.getweeklyartistchart', options);
+    },
+
+    getWeeklyTrackChart(options = {}) {
+      return request('GET', 'user.getweeklytrackchart', options);
+    },
+
   },
 };
