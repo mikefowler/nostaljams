@@ -11,7 +11,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = [thunkMiddleware, loggerMiddleware];
 
 export default function configureStore(initialState) {
-  return createStore(
+  const store = createStore(
     reducers,
     initialState,
     composeEnhancers(
@@ -19,4 +19,14 @@ export default function configureStore(initialState) {
       applyMiddleware(...middleware),
     ),
   );
+
+  if (module.hot) {
+    module.hot.accept('../reducers', () => {
+      // eslint-disable-next-line global-require
+      const nextRootReducer = require('../reducers/index');
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+
+  return store;
 }

@@ -38,12 +38,13 @@ render(
 // Set up hot module reloading
 if (module.hot) {
   module.hot.accept('./containers/Root', () => {
+    // eslint-disable-next-line global-require
+    const Component = require('./containers/Root').default;
+
     render(
-      <AppContainer
-        // eslint-disable-next-line global-require
-        component={require('./containers/Root').default}
-        props={{ store }}
-      />,
+      <AppContainer>
+        <Component store={store} />
+      </AppContainer>,
       document.getElementById('app'),
     );
   });

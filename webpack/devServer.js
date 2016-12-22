@@ -1,20 +1,28 @@
 var path = require('path');
 var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
+var express = require('express');
+var devMiddleware = require('webpack-dev-middleware');
+var hotMiddleware = require('webpack-hot-middleware');
 var config = require('./webpack.config');
 
-new WebpackDevServer(webpack(config), {
-  contentBase: path.resolve(__dirname, '../public'),
+var app = express();
+var compiler = webpack(config);
+
+app.use(devMiddleware(compiler, {
   publicPath: config.output.publicPath,
-  hot: true,
   historyApiFallback: true,
-  stats: {
-    colors: true
-  }
-}).listen(8080, 'localhost', function (err) {
+}));
+
+app.use(hotMiddleware(compiler));
+
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+app.listen(8080, function (err) {
   if (err) {
-    console.log(err);
+    return console.error(err);
   }
 
-  console.log('Listening at localhost:8080');
+  console.log('Listening at http://localhost:8080/');
 });

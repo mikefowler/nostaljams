@@ -2,12 +2,11 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   entry: {
     main: [
-      'webpack-dev-server/client?http://localhost:8080',
-      'webpack/hot/only-dev-server',
       'react-hot-loader/patch',
+      'webpack-hot-middleware/client',
       path.resolve(__dirname, '../src/index.jsx'),
     ],
   },
