@@ -4,24 +4,21 @@ import promise from 'es6-promise';
 import React from 'react';
 import { render } from 'react-dom';
 
-import Root from './containers/Root';
+import RootContainer from './containers/RootContainer';
 
 // Initialize the Promise polyfill
 promise.polyfill();
 
 function renderApp() {
   render(
-    <Root />,
+    <RootContainer />,
     document.getElementById('app'),
   );
 }
 
 if (module.hot) {
-  // Enable the Preact devtools if HMR is enabled
-  require('preact/devtools'); // eslint-disable-line global-require
-
   module.hot.accept();
-  module.hot.accept('./containers/Root');
+  module.hot.accept('./containers/RootContainer');
 }
 
 renderApp();

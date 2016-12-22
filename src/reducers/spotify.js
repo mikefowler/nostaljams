@@ -1,9 +1,14 @@
-import { USERNAME_UPDATED } from '../actions/lastfm';
-import { LOGIN_SUCCEEDED } from '../actions/auth';
+import User from '../models/User';
+import {
+  LOGOUT_SUCCEEDED,
+  LOGIN_SUCCEEDED,
+  FETCH_USER_SUCCEEDED,
+} from '../actions/spotify';
 
 const initialState = {
   isLoggedIn: false,
   accessToken: null,
+  user: new User(),
 };
 
 export default function reducer(state = initialState, action) {
@@ -16,10 +21,12 @@ export default function reducer(state = initialState, action) {
         isLoggedIn: true,
         accessToken: payload,
       };
-    case USERNAME_UPDATED:
+    case LOGOUT_SUCCEEDED:
+      return initialState;
+    case FETCH_USER_SUCCEEDED:
       return {
         ...state,
-        lastfmUsername: payload,
+        user: payload,
       };
     default:
       return state;

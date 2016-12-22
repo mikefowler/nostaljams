@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import app from './app';
-import auth from './auth';
+import spotify from './spotify';
 import lastfm from './lastfm';
 
 export default combineReducers({
   app,
-  auth,
+  spotify,
   lastfm,
 });

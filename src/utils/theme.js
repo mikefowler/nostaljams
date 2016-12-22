@@ -3,4 +3,5 @@ export default {
     black: '#000',
     white: '#fff',
   },
+  unit: 8,
 };

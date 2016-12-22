@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-const actions = __helper.requireDefault('actions/auth');
+const actions = __helper.requireDefault('actions/spotify');
 
 describe('auth action creators', () => {
   it('generates an action that redirects the browser to spotify', () => {
@@ -9,7 +9,7 @@ describe('auth action creators', () => {
     };
 
     const options = { test: 'test' };
-    const result = actions.loginWithSpotify(options);
+    const result = actions.login(options);
 
     expect(result).to.deep.equal(expectedAction);
   });

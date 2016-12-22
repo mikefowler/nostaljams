@@ -5,7 +5,7 @@ import authenticateWithSpotify from '../utils/authenticateWithSpotify';
 import LoginButton from '../components/LoginButton';
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.auth.isLoggedIn,
+  isLoggedIn: state.spotify.isLoggedIn,
 });
 
 const mapDispatchToProps = () => ({

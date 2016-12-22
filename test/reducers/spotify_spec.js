@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-const reducer = __helper.requireDefault('reducers/auth');
-const actions = __helper.requireDefault('actions/auth');
+const reducer = __helper.requireDefault('reducers/spotify');
+const actions = __helper.requireDefault('actions/spotify');
 
 const initialReducerState = {
   isLoggedIn: false,

@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
+
 import { css, withStyles } from '../utils/withStyles';
+import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '../utils/constants';
+import authenticateWithSpotify from '../utils/authenticateWithSpotify';
 
 const propTypes = {
   onPress: PropTypes.func,
@@ -24,7 +27,7 @@ function LoginButton({ onPress, styles }) {
 LoginButton.propTypes = propTypes;
 LoginButton.defaultProps = defaultProps;
 
-export default withStyles(({ color }) => ({
+export default withStyles(() => ({
   link: {
 
   },

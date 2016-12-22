@@ -22,10 +22,24 @@ describe('lastfm reducer', () => {
   });
 
   it('handles lastfm/FETCH_WEEKLY_TRACKS_SUCCEEDED', () => {
-    const payload = { tracks: [{ name: 'Two-Headed Boy' }] };
+    const payload = {
+      entities: {
+        track: {
+          1: {
+            name: 'Two-Headed Boy',
+            artist: 1,
+          },
+        },
+        artist: {
+          1: {
+            name: 'Mike',
+          },
+        },
+      },
+    };
     const initialState = { tracks: [] };
     const action = { type: actions.FETCH_WEEKLY_TRACKS_SUCCEEDED, payload };
-    const expectedState = { tracks: payload };
+    const expectedState = { tracks: payload.entities.track, artists: payload.entities.artist };
 
     expect(reducer(initialState, action)).to.deep.equal(expectedState);
   });

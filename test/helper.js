@@ -1,4 +1,4 @@
-import 'airbnb-browser-shims';
+import 'es5-shim';
 import 'isomorphic-fetch';
 import promise from 'es6-promise';
 import path from 'path';
@@ -18,7 +18,7 @@ chai.use(chaiEnzyme());
 wrap.register(withWindow);
 
 const helper = global.__helper = {}; // eslint-disable-line no-underscore-dangle
-const assetPathPrefix = '../src/scripts';
+const assetPathPrefix = '../src';
 
 helper.requireDefault = function requireDefault(srcPath) {
   const modulePath = path.join(assetPathPrefix, srcPath);
