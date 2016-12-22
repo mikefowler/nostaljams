@@ -1,21 +1,20 @@
-const express = require('express');
-const webpack = require('webpack');
-const config = require('./webpack.config.js')();
-const createWebpackMiddleware = require('webpack-dev-middleware');
-const createWebpackHotMiddleware = require('webpack-hot-middleware');
-const path = require('path');
+var path = require('path');
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var config = require('./webpack.config');
 
-const compiler = webpack(config);
-const app = express();
-app.use('/', express.static(path.resolve(__dirname, '../public')));
-const webpackDevMiddleware = createWebpackMiddleware(compiler, {
-  quiet: true,
-  noInfo: true,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
+new WebpackDevServer(webpack(config), {
+  contentBase: path.resolve(__dirname, '../public'),
   publicPath: config.output.publicPath,
+  hot: true,
+  historyApiFallback: true,
+  stats: {
+    colors: true
+  }
+}).listen(8080, 'localhost', function (err) {
+  if (err) {
+    console.log(err);
+  }
+
+  console.log('Listening at localhost:8080');
 });
-app.use(webpackDevMiddleware);
-app.use(createWebpackHotMiddleware(compiler));
-app.listen(8080, () => console.log('App listening on http://localhost:8080'));

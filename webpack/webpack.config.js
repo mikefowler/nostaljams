@@ -1,12 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var configFactory = () => ({
+module.exports = {
   devtool: 'source-map',
   entry: {
     main: [
-      'webpack-hot-middleware/client',
-      path.resolve(__dirname, '../src/index.jsx')
+      'webpack-dev-server/client?http://localhost:8080',
+      'webpack/hot/only-dev-server',
+      'react-hot-loader/patch',
+      path.resolve(__dirname, '../src/index.jsx'),
     ],
   },
   output: {
@@ -35,6 +37,4 @@ var configFactory = () => ({
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
-});
-
-module.exports = configFactory;
+};
