@@ -1,8 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { css, withStyles } from '../utils/withStyles';
+import * as actions from '../actions/app';
+import { css, withStyles } from '../utils/themes/withStyles';
 import dateStringToTimestamp from '../utils/dateStringToTimestamp';
 import timestampToDateString from '../utils/timestampToDateString';
+
+// ----------------------------------------------------------------------------
+// Props
+// ----------------------------------------------------------------------------
 
 const propTypes = {
   endDate: PropTypes.number,
@@ -16,6 +23,10 @@ const defaultProps = {
   selectDateRange() {},
   startDate: null,
 };
+
+// ----------------------------------------------------------------------------
+// Component
+// ----------------------------------------------------------------------------
 
 class SelectDateRange extends Component {
 
@@ -65,8 +76,29 @@ class SelectDateRange extends Component {
 SelectDateRange.propTypes = propTypes;
 SelectDateRange.defaultProps = defaultProps;
 
-export default withStyles(() => ({
+// ----------------------------------------------------------------------------
+// Stylesheet
+// ----------------------------------------------------------------------------
+
+export const SelectDateRangeWithStyles = withStyles(() => ({
   container: {
 
   },
 }))(SelectDateRange);
+
+// ----------------------------------------------------------------------------
+// Store connection
+// ----------------------------------------------------------------------------
+
+const mapStateToProps = state => ({
+  startDate: state.app.selectedStartDate,
+  endDate: state.app.selectedEndDate,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    selectDateRange: actions.selectDateRange,
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectDateRangeWithStyles);

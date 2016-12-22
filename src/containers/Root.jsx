@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 
-import AppContainer from './AppContainer';
+import App from './App';
 
 export default function Root({ store }) {
   return (
     <Provider store={store}>
-      <AppContainer />
+      <App />
     </Provider>
   );
 }

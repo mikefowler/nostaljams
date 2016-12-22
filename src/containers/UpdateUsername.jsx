@@ -1,5 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { css, withStyles } from '../utils/withStyles';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as actions from '../actions/lastfm';
+import { css, withStyles } from '../utils/themes/withStyles';
+
+// ----------------------------------------------------------------------------
+// Props
+// ----------------------------------------------------------------------------
 
 const propTypes = {
   updateUsername: PropTypes.func,
@@ -12,6 +20,10 @@ const defaultProps = {
   resetUsername() {},
   updateUsername() {},
 };
+
+// ----------------------------------------------------------------------------
+// Component
+// ----------------------------------------------------------------------------
 
 class UpdateUsername extends Component {
 
@@ -71,8 +83,29 @@ class UpdateUsername extends Component {
 UpdateUsername.propTypes = propTypes;
 UpdateUsername.defaultProps = defaultProps;
 
-export default withStyles(() => ({
+// ----------------------------------------------------------------------------
+// Stylesheet
+// ----------------------------------------------------------------------------
+
+export const UpdateUserNameWithStyles = withStyles(() => ({
   container: {
 
   },
 }))(UpdateUsername);
+
+// ----------------------------------------------------------------------------
+// Store connection
+// ----------------------------------------------------------------------------
+
+const mapStateToProps = state => ({
+  username: state.lastfm.username,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    updateUsername: actions.updateUsername,
+    resetUsername: actions.resetUsername,
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateUserNameWithStyles);

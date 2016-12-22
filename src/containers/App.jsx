@@ -1,12 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import qs from 'qs';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { css, withStyles, withStylesPropTypes } from '../utils/withStyles';
+import * as actions from '../actions/spotify';
+import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
 import removeLocationHash from '../utils/removeLocationHash';
-import UpdateUsernameContainer from '../containers/UpdateUsernameContainer';
-import LoginButtonContainer from '../containers/LoginButtonContainer';
-import SpotifyUserCardContainer from '../containers/SpotifyUserCardContainer';
-import ChartListContainer from '../containers/ChartListContainer';
+import UpdateUsername from '../containers/UpdateUsername';
+import LoginButton from '../containers/LoginButton';
+import SpotifyUserCard from '../containers/SpotifyUserCard';
+import ChartList from '../containers/ChartList';
+
+// ----------------------------------------------------------------------------
+// Props
+// ----------------------------------------------------------------------------
 
 const propTypes = {
   ...withStylesPropTypes,
@@ -21,6 +28,10 @@ const defaultProps = {
   isBootstrapped: false,
   isLoggedIn: false,
 };
+
+// ----------------------------------------------------------------------------
+// Component
+// ----------------------------------------------------------------------------
 
 class App extends Component {
 
@@ -58,15 +69,15 @@ class App extends Component {
       <div {...css(styles.container)}>
         {isLoggedIn && (
           <div>
-            <SpotifyUserCardContainer />
-            <UpdateUsernameContainer />
-            <ChartListContainer />
+            <SpotifyUserCard />
+            <UpdateUsername />
+            <ChartList />
           </div>
         )}
 
         {!isLoggedIn && (
           <div>
-            <LoginButtonContainer />
+            <LoginButton />
           </div>
         )}
       </div>
@@ -77,8 +88,32 @@ class App extends Component {
 App.propTypes = propTypes;
 App.defaultProps = defaultProps;
 
-export default withStyles(() => ({
+// ----------------------------------------------------------------------------
+// Stylesheet
+// ----------------------------------------------------------------------------
+
+const AppWithStyles = withStyles(() => ({
   container: {
 
   },
 }))(App);
+
+// ----------------------------------------------------------------------------
+// Store connection
+// ----------------------------------------------------------------------------
+
+const mapStateToProps = state => ({
+  isBootstrapped: state.app.isBootstrapped,
+  isLoggedIn: state.spotify.isLoggedIn,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    setAccessToken: actions.setAccessToken,
+  }, dispatch)
+);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppWithStyles);

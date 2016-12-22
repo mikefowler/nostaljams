@@ -8,7 +8,7 @@ import { persistStore } from 'redux-persist';
 import immutableTransform from 'redux-persist-transform-immutable';
 
 import configureStore from './store/configureStore';
-import RootContainer from './containers/RootContainer';
+import Root from './containers/Root';
 import User from './models/User';
 import Chart from './models/Chart';
 
@@ -30,18 +30,18 @@ persistStore(store, {
 // Initial render pass of the app into the DOM
 render(
   <AppContainer>
-    <RootContainer store={store} />
+    <Root store={store} />
   </AppContainer>,
   document.getElementById('app'),
 );
 
 // Set up hot module reloading
 if (module.hot) {
-  module.hot.accept('./containers/RootContainer', () => {
+  module.hot.accept('./containers/Root', () => {
     render(
       <AppContainer
         // eslint-disable-next-line global-require
-        component={require('./containers/RootContainer').default}
+        component={require('./containers/Root').default}
         props={{ store }}
       />,
       document.getElementById('app'),
