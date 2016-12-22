@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
-import { SELECTED_DATE_RANGE } from '../actions/app';
-import { LOGOUT_SUCCEEDED } from '../actions/spotify';
+import { SELECT_DATE_RANGE } from '../actions/app';
+import { LOGOUT } from '../actions/spotify';
 
 const initialState = new Map({
   isBootstrapped: false,
@@ -15,12 +15,12 @@ export default function reducer(state = initialState, action) {
   switch (type) {
     case REHYDRATE:
       return state.set('isBootstrapped', true);
-    case LOGOUT_SUCCEEDED:
+    case LOGOUT:
       return state.merge({
         selectedStartDate: null,
         selectedEndDate: null,
       });
-    case SELECTED_DATE_RANGE:
+    case SELECT_DATE_RANGE:
       return state.merge({
         selectedStartDate: payload.start,
         selectedEndDate: payload.end,

@@ -5,15 +5,15 @@ import * as parsers from '../parsers/lastfm';
 // Actions
 // ----------------------------------------------------------------------------
 
-export const FETCH_WEEKLY_CHART_LIST_REQUESTED = 'lastfm/FETCH_WEEKLY_CHART_LIST_REQUESTED';
-export const FETCH_WEEKLY_CHART_LIST_SUCCEEDED = 'lastfm/FETCH_WEEKLY_CHART_LIST_SUCCEEDED';
-export const FETCH_WEEKLY_CHART_LIST_FAILED = 'lastfm/FETCH_WEEKLY_CHART_LIST_FAILED';
+export const FETCH_WEEKLY_CHART_LIST_REQUEST = 'lastfm/FETCH_WEEKLY_CHART_LIST_REQUEST';
+export const FETCH_WEEKLY_CHART_LIST_SUCCESS = 'lastfm/FETCH_WEEKLY_CHART_LIST_SUCCESS';
+export const FETCH_WEEKLY_CHART_LIST_FAILURE = 'lastfm/FETCH_WEEKLY_CHART_LIST_FAILURE';
 
-export const FETCH_WEEKLY_TRACKS_REQUESTED = 'lastfm/FETCH_WEEKLY_TRACKS_REQUESTED';
-export const FETCH_WEEKLY_TRACKS_SUCCEEDED = 'lastfm/FETCH_WEEKLY_TRACKS_SUCCEEDED';
-export const FETCH_WEEKLY_FAILED = 'lastfm/FETCH_WEEKLY_FAILED';
+export const FETCH_WEEKLY_TRACKS_REQUEST = 'lastfm/FETCH_WEEKLY_TRACKS_REQUEST';
+export const FETCH_WEEKLY_TRACKS_SUCCESS = 'lastfm/FETCH_WEEKLY_TRACKS_SUCCESS';
+export const FETCH_WEEKLY_TRACKS_FAILURE = 'lastfm/FETCH_WEEKLY_TRACKS_FAILURE';
 
-export const USERNAME_UPDATED = 'lastfm/USERNAME_UPDATED';
+export const USERNAME_UPDATE = 'lastfm/USERNAME_UPDATE';
 export const USERNAME_RESET = 'lastfm/USERNAME_RESET';
 
 // ----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ export const USERNAME_RESET = 'lastfm/USERNAME_RESET';
 
 function fetchWeeklyChartListRequested() {
   return {
-    type: FETCH_WEEKLY_CHART_LIST_REQUESTED,
+    type: FETCH_WEEKLY_CHART_LIST_REQUEST,
   };
 }
 
@@ -32,14 +32,14 @@ function fetchWeeklyChartListSucceeded(response) {
   const payload = parsers.parseCharts(response);
 
   return {
-    type: FETCH_WEEKLY_CHART_LIST_SUCCEEDED,
+    type: FETCH_WEEKLY_CHART_LIST_SUCCESS,
     payload,
   };
 }
 
 function fetchWeeklyChartListFailed(err) {
   return {
-    type: FETCH_WEEKLY_CHART_LIST_FAILED,
+    type: FETCH_WEEKLY_CHART_LIST_FAILURE,
     error: true,
     payload: err.message,
   };
@@ -68,13 +68,13 @@ export function fetchWeeklyChartList() {
 
 function fetchWeeklyTrackChartRequest() {
   return {
-    type: FETCH_WEEKLY_TRACKS_REQUESTED,
+    type: FETCH_WEEKLY_TRACKS_REQUEST,
   };
 }
 
 function fetchWeeklyTrackChartFailed(err) {
   return {
-    type: FETCH_WEEKLY_FAILED,
+    type: FETCH_WEEKLY_TRACKS_FAILURE,
     error: true,
     payload: err.message,
   };
@@ -82,7 +82,7 @@ function fetchWeeklyTrackChartFailed(err) {
 
 function fetchWeeklyTrackChartSucceeded(response) {
   return {
-    type: FETCH_WEEKLY_TRACKS_SUCCEEDED,
+    type: FETCH_WEEKLY_TRACKS_SUCCESS,
     payload: response,
   };
 }
@@ -116,7 +116,7 @@ export function updateUsername(username = null) {
   return (dispatch) => {
     // First update the username in the store
     dispatch({
-      type: USERNAME_UPDATED,
+      type: USERNAME_UPDATE,
       payload: username,
     });
 

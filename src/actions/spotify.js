@@ -1,21 +1,21 @@
 import spotify from '../utils/spotify';
 import * as parsers from '../parsers/spotify';
 
-export const LOGOUT_SUCCEEDED = 'spotify/LOGOUT_SUCCEEDED';
+export const LOGOUT = 'spotify/LOGOUT';
 
-export const LOGIN_REQUESTED = 'spotify/LOGIN_REQUESTED';
-export const LOGIN_SUCCEEDED = 'spotify/LOGIN_SUCCEEDED';
-export const LOGIN_FAILED = 'spotify/LOGIN_FAILED';
+export const LOGIN_REQUEST = 'spotify/LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'spotify/LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'spotify/LOGIN_FAILURE';
 
-export const FETCH_USER_REQUESTED = 'spotify/FETCH_USER_REQUESTED';
-export const FETCH_USER_SUCCEEDED = 'spotify/FETCH_USER_SUCCEEDED';
-export const FETCH_USER_FAILED = 'spotify/FETCH_USER_FAILED';
+export const FETCH_USER_REQUEST = 'spotify/FETCH_USER_REQUEST';
+export const FETCH_USER_SUCCESS = 'spotify/FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'spotify/FETCH_USER_FAILURE';
 
 // Fetching the authenticated user
 
 function fetchUserRequested() {
   return {
-    type: FETCH_USER_REQUESTED,
+    type: FETCH_USER_REQUEST,
   };
 }
 
@@ -23,14 +23,14 @@ function fetchUserSucceeded(response) {
   const payload = parsers.parseUser(response);
 
   return {
-    type: FETCH_USER_SUCCEEDED,
+    type: FETCH_USER_SUCCESS,
     payload,
   };
 }
 
 function fetchUserFailed(payload) {
   return {
-    type: FETCH_USER_FAILED,
+    type: FETCH_USER_FAILURE,
     error: true,
     payload,
   };
@@ -56,13 +56,13 @@ export function fetchUser() {
 
 export function login() {
   return {
-    type: LOGIN_REQUESTED,
+    type: LOGIN_REQUEST,
   };
 }
 
 export function logout() {
   return {
-    type: LOGOUT_SUCCEEDED,
+    type: LOGOUT,
   };
 }
 
@@ -70,7 +70,7 @@ export function setAccessToken(payload) {
   return (dispatch) => {
     // First set the access token in the store
     dispatch({
-      type: LOGIN_SUCCEEDED,
+      type: LOGIN_SUCCESS,
       payload,
     });
 

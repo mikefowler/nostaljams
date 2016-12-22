@@ -35,7 +35,7 @@ export default {
   user: {
 
     getWeeklyChartList(options = {}) {
-      return request('GET', 'user.getweeklyalbumchart', options);
+      return request('GET', 'user.getweeklychartlist', options);
     },
 
     getWeeklyAlbumChart(options = {}) {

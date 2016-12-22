@@ -13,9 +13,9 @@ describe('auth reducer', () => {
     expect(reducer(undefined, {})).to.deep.equal(initialReducerState);
   });
 
-  it('handles auth/LOGIN_SUCCEEDED', () => {
+  it('handles auth/LOGIN_SUCCESS', () => {
     const initialState = { isLoggedIn: false, accessToken: null };
-    const action = { type: actions.LOGIN_SUCCEEDED, payload: '123' };
+    const action = { type: actions.LOGIN_SUCCESS, payload: '123' };
     const expectedState = { isLoggedIn: true, accessToken: '123' };
 
     expect(reducer(initialState, action)).to.deep.equal(expectedState);

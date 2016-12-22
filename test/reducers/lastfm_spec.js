@@ -13,15 +13,15 @@ describe('lastfm reducer', () => {
     expect(reducer(undefined, {})).to.deep.equal(initialReducerState);
   });
 
-  it('handles lastfm/USERNAME_UPDATED', () => {
+  it('handles lastfm/USERNAME_UPDATE', () => {
     const initialState = { username: null };
-    const action = { type: actions.USERNAME_UPDATED, payload: 'mike' };
+    const action = { type: actions.USERNAME_UPDATE, payload: 'mike' };
     const expectedState = { username: 'mike' };
 
     expect(reducer(initialState, action)).to.deep.equal(expectedState);
   });
 
-  it('handles lastfm/FETCH_WEEKLY_TRACKS_SUCCEEDED', () => {
+  it('handles lastfm/FETCH_WEEKLY_TRACKS_SUCCESS', () => {
     const payload = {
       entities: {
         track: {
@@ -38,7 +38,7 @@ describe('lastfm reducer', () => {
       },
     };
     const initialState = { tracks: [] };
-    const action = { type: actions.FETCH_WEEKLY_TRACKS_SUCCEEDED, payload };
+    const action = { type: actions.FETCH_WEEKLY_TRACKS_SUCCESS, payload };
     const expectedState = { tracks: payload.entities.track, artists: payload.entities.artist };
 
     expect(reducer(initialState, action)).to.deep.equal(expectedState);
