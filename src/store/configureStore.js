@@ -8,8 +8,7 @@ import localForage from 'localforage';
 import immutableTransform from 'redux-persist-transform-immutable';
 
 import reducers from '../reducers';
-import User from '../models/User';
-import Chart from '../models/Chart';
+import { User, Chart } from '../store/models';
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

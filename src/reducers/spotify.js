@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 
-import User from '../models/User';
+import { User } from '../store/models';
 import {
   LOGOUT,
   LOGIN_SUCCESS,

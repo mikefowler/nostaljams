@@ -3,7 +3,7 @@
 
 import { List } from 'immutable';
 
-import User from '../models/User';
+import { User } from '../store/models';
 
 export function parseUser(response) {
   return new User({

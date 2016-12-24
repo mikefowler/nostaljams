@@ -1,5 +1,4 @@
-import Chart from '../models/Chart';
-import ChartMap from '../models/ChartMap';
+import { Chart, ChartMap } from '../store/models';
 
 export function parseChart(response) {
   return new Chart({

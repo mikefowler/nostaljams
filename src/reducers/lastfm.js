@@ -1,6 +1,6 @@
 import { Map, List } from 'immutable';
 
-import ChartMap from '../models/ChartMap';
+import { ChartMap } from '../store/models';
 
 import {
   FETCH_WEEKLY_CHART_LIST_SUCCESS,
