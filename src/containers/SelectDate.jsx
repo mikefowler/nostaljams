@@ -2,10 +2,10 @@ import 'react-dates/lib/css/_datepicker.css';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DateRangePicker } from 'react-dates';
+import { SingleDatePicker } from 'react-dates';
 import moment from 'moment';
 
-import { setDateRange } from '../actions/app';
+import { setDate } from '../actions/app';
 import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
 
 // ----------------------------------------------------------------------------
@@ -14,61 +14,50 @@ import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles
 
 const propTypes = {
   ...withStylesPropTypes,
-  endDate: PropTypes.number,
-  setDateRange: PropTypes.func.isRequired,
-  startDate: PropTypes.number,
+  setDate: PropTypes.func.isRequired,
+  selectedDate: PropTypes.number,
 };
 
 // ----------------------------------------------------------------------------
 // Component
 // ----------------------------------------------------------------------------
 
-class SelectDateRange extends Component {
+class SelectDate extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      focusedInput: null,
-      startDate: props.startDate ? moment(props.startDate) : null,
-      endDate: props.endDate ? moment(props.endDate) : null,
+      focused: null,
+      selectedDate: props.selectedDate ? moment(props.selectedDate) : null,
     };
 
-    this.onDatesChange = this.onDatesChange.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
     this.onFocusChange = this.onFocusChange.bind(this);
   }
 
-  onDatesChange({ startDate, endDate }) {
-    this.setState({ startDate, endDate });
-
-    // If both the start and end date have been selected, call the action
-    // to update the dates in the Redux store
-    if (startDate && endDate) {
-      this.props.setDateRange({
-        startDate: startDate.valueOf(),
-        endDate: endDate.valueOf(),
-      });
-    }
+  onDateChange(selectedDate) {
+    this.setState({ selectedDate });
+    this.props.setDate(selectedDate.valueOf());
   }
 
-  onFocusChange(focusedInput) {
-    this.setState({ focusedInput });
+  onFocusChange({ focused }) {
+    this.setState({ focused });
   }
 
   render() {
     const { styles } = this.props;
-    const { startDate, endDate, focusedInput } = this.state;
+    const { selectedDate, focused } = this.state;
 
     return (
       <div {...css(styles.container)}>
-        <DateRangePicker
-          // Only allow today or days previous to be selected
+        <SingleDatePicker
+          id="date"
+          date={selectedDate}
           isOutsideRange={day => moment().isSameOrBefore(day)}
-          onDatesChange={this.onDatesChange}
+          focused={focused}
           onFocusChange={this.onFocusChange}
-          focusedInput={focusedInput}
-          startDate={startDate}
-          endDate={endDate}
+          onDateChange={this.onDateChange}
         />
       </div>
     );
@@ -76,31 +65,28 @@ class SelectDateRange extends Component {
 
 }
 
-SelectDateRange.propTypes = propTypes;
+SelectDate.propTypes = propTypes;
 
 // ----------------------------------------------------------------------------
 // Stylesheet
 // ----------------------------------------------------------------------------
 
-export const SelectDateRangeWithStyles = withStyles(() => ({
+export const SelectDateWithStyles = withStyles(() => ({
   container: {
 
   },
-}))(SelectDateRange);
+}))(SelectDate);
 
 // ----------------------------------------------------------------------------
 // Store connection
 // ----------------------------------------------------------------------------
 
 const mapStateToProps = state => ({
-  startDate: state.app.get('selectedStartDate'),
-  endDate: state.app.get('selectedEndDate'),
+  selectedDate: state.app.get('selectedDate'),
 });
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    setDateRange,
-  }, dispatch)
+  bindActionCreators({ setDate }, dispatch)
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectDateRangeWithStyles);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectDateWithStyles);

@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { getChartsInDateRange } from '../store/selectors';
+import { getChartsForDate } from '../store/selectors';
 import { css, withStyles } from '../utils/themes/withStyles';
-import SelectDateRange from '../containers/SelectDateRange';
+import SelectDate from '../containers/SelectDate';
 
 // ----------------------------------------------------------------------------
 // Props
@@ -28,7 +28,7 @@ function ChartList({ charts, selectedCharts, styles }) {
   return (
     <div>
       <h2>Available Charts</h2>
-      <SelectDateRange />
+      <SelectDate />
       <ul {...css(styles.container)}>
         {selectedCharts && selectedCharts.map((id) => {
           const chart = charts.get(id);
@@ -65,7 +65,7 @@ const ChartListWithStyles = withStyles(() => ({
 
 const mapStateToProps = state => ({
   charts: state.lastfm.get('charts'),
-  selectedCharts: getChartsInDateRange(state),
+  selectedCharts: getChartsForDate(state),
 });
 
 export default connect(mapStateToProps)(ChartListWithStyles);
