@@ -1,11 +1,10 @@
-export const SELECT_DATE_RANGE = 'app/SELECT_DATE_RANGE';
+export const SET_DATE_RANGE = 'app/SET_DATE_RANGE';
+export const SET_START_DATE = 'app/SET_START_DATE';
+export const SET_END_DATE = 'app/SET_END_DATE';
 
-export function selectDateRange(startDate, endDate) {
+export function setDateRange(payload) {
   return {
-    type: SELECT_DATE_RANGE,
-    payload: {
-      start: startDate,
-      end: endDate,
-    },
+    type: SET_DATE_RANGE,
+    payload,
   };
 }

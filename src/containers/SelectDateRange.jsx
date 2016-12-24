@@ -1,27 +1,22 @@
+import 'react-dates/lib/css/_datepicker.css';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { DateRangePicker } from 'react-dates';
+import moment from 'moment';
 
-import * as actions from '../actions/app';
-import { css, withStyles } from '../utils/themes/withStyles';
-import dateStringToTimestamp from '../utils/dateStringToTimestamp';
-import timestampToDateString from '../utils/timestampToDateString';
+import { setDateRange } from '../actions/app';
+import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
 
 // ----------------------------------------------------------------------------
 // Props
 // ----------------------------------------------------------------------------
 
 const propTypes = {
+  ...withStylesPropTypes,
   endDate: PropTypes.number,
-  selectDateRange: PropTypes.func,
+  setDateRange: PropTypes.func.isRequired,
   startDate: PropTypes.number,
-  styles: PropTypes.object.isRequired,
-};
-
-const defaultProps = {
-  endDate: null,
-  selectDateRange() {},
-  startDate: null,
 };
 
 // ----------------------------------------------------------------------------
@@ -34,39 +29,47 @@ class SelectDateRange extends Component {
     super(props);
 
     this.state = {
-      startDate: timestampToDateString(props.startDate),
-      endDate: timestampToDateString(props.endDate),
+      focusedInput: null,
+      startDate: props.startDate ? moment(props.startDate) : null,
+      endDate: props.endDate ? moment(props.endDate) : null,
     };
+
+    this.onDatesChange = this.onDatesChange.bind(this);
+    this.onFocusChange = this.onFocusChange.bind(this);
+  }
+
+  onDatesChange({ startDate, endDate }) {
+    this.setState({ startDate, endDate });
+
+    // If both the start and end date have been selected, call the action
+    // to update the dates in the Redux store
+    if (startDate && endDate) {
+      this.props.setDateRange({
+        startDate: startDate.valueOf(),
+        endDate: endDate.valueOf(),
+      });
+    }
+  }
+
+  onFocusChange(focusedInput) {
+    this.setState({ focusedInput });
   }
 
   render() {
-    const { selectDateRange, styles } = this.props;
-    const { startDate, endDate } = this.state;
+    const { styles } = this.props;
+    const { startDate, endDate, focusedInput } = this.state;
 
     return (
       <div {...css(styles.container)}>
-        <input
-          placeholder="From"
-          type="date"
-          value={startDate}
-          onChange={e => this.setState({ startDate: e.target.value })}
+        <DateRangePicker
+          // Only allow today or days previous to be selected
+          isOutsideRange={day => moment().isSameOrBefore(day)}
+          onDatesChange={this.onDatesChange}
+          onFocusChange={this.onFocusChange}
+          focusedInput={focusedInput}
+          startDate={startDate}
+          endDate={endDate}
         />
-        <input
-          placeholder="To"
-          type="date"
-          value={endDate}
-          onChange={e => this.setState({ endDate: e.target.value })}
-        />
-        <button
-          onClick={() => {
-            selectDateRange(
-              dateStringToTimestamp(this.state.startDate),
-              dateStringToTimestamp(this.state.endDate),
-            );
-          }}
-        >
-          Find Charts
-        </button>
       </div>
     );
   }
@@ -74,7 +77,6 @@ class SelectDateRange extends Component {
 }
 
 SelectDateRange.propTypes = propTypes;
-SelectDateRange.defaultProps = defaultProps;
 
 // ----------------------------------------------------------------------------
 // Stylesheet
@@ -97,7 +99,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    selectDateRange: actions.selectDateRange,
+    setDateRange,
   }, dispatch)
 );
 
