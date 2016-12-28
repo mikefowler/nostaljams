@@ -1,4 +1,3 @@
-import 'react-dates/lib/css/_datepicker.css';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -51,6 +50,12 @@ class SelectDate extends Component {
 
     return (
       <div {...css(styles.container)}>
+        <label
+          {...css(styles.label)}
+          htmlFor="date"
+        >
+          Take me back to
+        </label>
         <SingleDatePicker
           id="date"
           date={selectedDate}
@@ -71,9 +76,13 @@ SelectDate.propTypes = propTypes;
 // Stylesheet
 // ----------------------------------------------------------------------------
 
-export const SelectDateWithStyles = withStyles(() => ({
+export const SelectDateWithStyles = withStyles(({ font }) => ({
   container: {
 
+  },
+  label: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
   },
 }))(SelectDate);
 

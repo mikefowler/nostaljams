@@ -1,0 +1,36 @@
+/* Global */
+
+body,
+input,
+button {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 19px;
+  font-weight: 200;
+}
+
+/* Datepicker */
+
+@import "~react-dates/lib/css/_datepicker.css";
+
+.SingleDatePicker {
+  vertical-align: middle;
+}
+
+.SingleDatePickerInput {
+  border: none;
+  background-color: transparent;
+}
+
+.DateInput {
+  background-color: transparent;
+  padding: 0;
+  display: inline;
+}
+
+.DateInput__display-text {
+  font-size: 19px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  line-height: initial;
+}

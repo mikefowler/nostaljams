@@ -11,7 +11,6 @@ import { css, withStyles } from '../utils/themes/withStyles';
 
 const propTypes = {
   updateUsername: PropTypes.func,
-  resetUsername: PropTypes.func,
   styles: PropTypes.object.isRequired,
   username: PropTypes.string,
 };
@@ -37,43 +36,30 @@ class UpdateUsername extends Component {
 
   render() {
     const { input } = this.state;
-    const { updateUsername, resetUsername, username, styles } = this.props;
+    const { username, updateUsername, styles } = this.props;
 
-    const onSubmit = (e) => {
-      if (e) e.preventDefault();
-      updateUsername(input);
+    const onBlur = () => {
+      if (this.state.input !== username) {
+        updateUsername(input);
+      }
     };
 
     return (
-      <div {...css(styles.container)}>
-
-        {username && (
-          <div>
-            <p>Your Last.FM username is <b>{username}</b>.</p>
-            <button onClick={resetUsername}>Change</button>
-          </div>
-        )}
-
-        {!username && (
-          <form onSubmit={onSubmit}>
-            <label htmlFor="username">
-              Username
-            </label>
-            <input
-              id="username"
-              placeholder="Username"
-              onChange={e => this.setState({ input: e.target.value })}
-              value={input}
-            />
-            <button
-              disabled={!input}
-              type="submit"
-            >
-              Update
-            </button>
-          </form>
-        )}
-
+      <div>
+        <label
+          {...css(styles.label)}
+          htmlFor="username"
+        >
+          My Last.FM username is
+        </label>
+        <input
+          {...css(styles.input)}
+          id="username"
+          placeholder="Username"
+          onChange={e => this.setState({ input: e.target.value })}
+          onBlur={onBlur}
+          value={input}
+        />
       </div>
     );
   }
@@ -87,9 +73,18 @@ UpdateUsername.defaultProps = defaultProps;
 // Stylesheet
 // ----------------------------------------------------------------------------
 
-export const UpdateUserNameWithStyles = withStyles(() => ({
+export const UpdateUserNameWithStyles = withStyles(({ font, unit }) => ({
   container: {
 
+  },
+  label: {
+
+  },
+  input: {
+    appearance: 'none',
+    border: 'none',
+    borderBottom: '1px solid lightgray',
+    marginLeft: unit,
   },
 }))(UpdateUsername);
 

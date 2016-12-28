@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import * as actions from '../actions/spotify';
 import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
 import removeLocationHash from '../utils/removeLocationHash';
-import UpdateUsername from '../containers/UpdateUsername';
 import LoginButton from '../containers/LoginButton';
 import SpotifyUserCard from '../containers/SpotifyUserCard';
-import ChartList from '../containers/ChartList';
+import SetUsernameAndDate from '../containers/SetUsernameAndDate';
 
 // ----------------------------------------------------------------------------
 // Props
@@ -70,8 +69,7 @@ class App extends Component {
         {isLoggedIn && (
           <div>
             <SpotifyUserCard />
-            <UpdateUsername />
-            <ChartList />
+            <SetUsernameAndDate />
           </div>
         )}
 
