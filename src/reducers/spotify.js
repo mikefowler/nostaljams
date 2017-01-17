@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 
 import { User } from '../store/models';
+import parsers from '../store/parsers';
 import {
   LOGOUT,
   LOGIN_SUCCESS,
@@ -24,8 +25,10 @@ export default function reducer(state = initialState, action) {
       });
     case LOGOUT:
       return initialState;
-    case FETCH_USER_SUCCESS:
-      return state.set('user', payload);
+    case FETCH_USER_SUCCESS: {
+      const user = parsers.spotify.parseUser(payload);
+      return state.merge({ user });
+    }
     default:
       return state;
   }

@@ -34,5 +34,9 @@ export default function configureStore(initialState, persistCallback) {
     ],
   }, persistCallback);
 
+  if (process.env.NODE_ENV === 'development') {
+    window.store = store;
+  }
+
   return store;
 }

@@ -9,6 +9,7 @@ import removeLocationHash from '../utils/removeLocationHash';
 import LoginButton from '../containers/LoginButton';
 import SpotifyUserCard from '../containers/SpotifyUserCard';
 import SetUsernameAndDate from '../containers/SetUsernameAndDate';
+import TrackList from '../containers/TrackList';
 
 // ----------------------------------------------------------------------------
 // Props
@@ -70,6 +71,7 @@ class App extends Component {
           <div>
             <SpotifyUserCard />
             <SetUsernameAndDate />
+            <TrackList />
           </div>
         )}
 

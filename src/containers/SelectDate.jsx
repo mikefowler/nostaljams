@@ -37,7 +37,7 @@ class SelectDate extends Component {
 
   onDateChange(selectedDate) {
     this.setState({ selectedDate });
-    this.props.setDate(selectedDate.valueOf());
+    this.props.setDate(selectedDate && selectedDate.valueOf());
   }
 
   onFocusChange({ focused }) {
@@ -76,7 +76,7 @@ SelectDate.propTypes = propTypes;
 // Stylesheet
 // ----------------------------------------------------------------------------
 
-export const SelectDateWithStyles = withStyles(({ font }) => ({
+export const SelectDateWithStyles = withStyles(() => ({
   container: {
 
   },

@@ -1,5 +1,5 @@
 import spotify from '../utils/spotify';
-import * as parsers from '../parsers/spotify';
+import parsers from '../store/parsers';
 
 export const LOGOUT = 'spotify/LOGOUT';
 
@@ -11,6 +11,10 @@ export const FETCH_USER_REQUEST = 'spotify/FETCH_USER_REQUEST';
 export const FETCH_USER_SUCCESS = 'spotify/FETCH_USER_SUCCESS';
 export const FETCH_USER_FAILURE = 'spotify/FETCH_USER_FAILURE';
 
+export const LOOKUP_TRACKS_REQUEST = 'spotify/LOOKUP_TRACKS_REQUEST';
+export const LOOKUP_TRACKS_SUCCESS = 'spotify/LOOKUP_TRACKS_SUCCESS';
+export const LOOKUP_TRACKS_FAILURE = 'spotify/LOOKUP_TRACKS_FAILURE';
+
 // Fetching the authenticated user
 
 function fetchUserRequested() {
@@ -19,9 +23,7 @@ function fetchUserRequested() {
   };
 }
 
-function fetchUserSucceeded(response) {
-  const payload = parsers.parseUser(response);
-
+function fetchUserSucceeded(payload) {
   return {
     type: FETCH_USER_SUCCESS,
     payload,
@@ -81,3 +83,42 @@ export function setAccessToken(payload) {
     dispatch(fetchUser());
   };
 }
+
+// Search for track(s) and return matches
+
+function lookupTracksRequest() {
+  return {
+    type: LOOKUP_TRACKS_REQUEST,
+  };
+}
+
+function lookupTracksSuccess(payload) {
+  return {
+    type: LOOKUP_TRACKS_SUCCESS,
+    payload,
+  };
+}
+
+function lookupTracksFailure(payload) {
+  return {
+    type: LOOKUP_TRACKS_FAILURE,
+    error: true,
+    payload,
+  };
+}
+
+export function lookupTracks(tracks) {
+  return (dispatch) => {
+    lookupTracksRequest();
+
+    const promises = tracks.map(track => (
+      spotify.searchTracks(`track:${track.name} artist:${track.artist}`)
+    ));
+
+    return Promise.all(promises).then((results) => {
+      console.log(results);
+    });
+  };
+}
+
+window.lookupTracks = lookupTracks;

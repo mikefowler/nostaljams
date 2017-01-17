@@ -1,5 +1,5 @@
 import lastfm from '../utils/lastfm';
-import * as parsers from '../parsers/lastfm';
+import parsers from '../store/parsers';
 
 // ----------------------------------------------------------------------------
 // Actions
@@ -9,9 +9,9 @@ export const FETCH_WEEKLY_CHART_LIST_REQUEST = 'lastfm/FETCH_WEEKLY_CHART_LIST_R
 export const FETCH_WEEKLY_CHART_LIST_SUCCESS = 'lastfm/FETCH_WEEKLY_CHART_LIST_SUCCESS';
 export const FETCH_WEEKLY_CHART_LIST_FAILURE = 'lastfm/FETCH_WEEKLY_CHART_LIST_FAILURE';
 
-export const FETCH_WEEKLY_TRACKS_REQUEST = 'lastfm/FETCH_WEEKLY_TRACKS_REQUEST';
-export const FETCH_WEEKLY_TRACKS_SUCCESS = 'lastfm/FETCH_WEEKLY_TRACKS_SUCCESS';
-export const FETCH_WEEKLY_TRACKS_FAILURE = 'lastfm/FETCH_WEEKLY_TRACKS_FAILURE';
+export const FETCH_CHARTS_FOR_WEEK_REQUEST = 'lastfm/FETCH_CHARTS_FOR_WEEK_REQUEST';
+export const FETCH_CHARTS_FOR_WEEK_SUCCESS = 'lastfm/FETCH_CHARTS_FOR_WEEK_SUCCESS';
+export const FETCH_CHARTS_FOR_WEEK_FAILURE = 'lastfm/FETCH_CHARTS_FOR_WEEK_FAILURE';
 
 export const USERNAME_UPDATE = 'lastfm/USERNAME_UPDATE';
 export const USERNAME_RESET = 'lastfm/USERNAME_RESET';
@@ -29,7 +29,7 @@ function fetchWeeklyChartListRequested() {
 }
 
 function fetchWeeklyChartListSucceeded(response) {
-  const payload = parsers.parseCharts(response);
+  const payload = parsers.lastfm.parseCharts(response);
 
   return {
     type: FETCH_WEEKLY_CHART_LIST_SUCCESS,
@@ -64,49 +64,47 @@ export function fetchWeeklyChartList() {
   };
 }
 
-// Fetch a LastFM user's weekly track chart for a given start and end date
+// Fetch a user's top artists and top tracks for a given chart week
 
-function fetchWeeklyTrackChartRequest() {
+function fetchChartsForWeekRequest() {
   return {
-    type: FETCH_WEEKLY_TRACKS_REQUEST,
+    type: FETCH_CHARTS_FOR_WEEK_REQUEST,
   };
 }
 
-function fetchWeeklyTrackChartFailed(err) {
+function fetchChartsForWeekFailed(err) {
   return {
-    type: FETCH_WEEKLY_TRACKS_FAILURE,
+    type: FETCH_CHARTS_FOR_WEEK_FAILURE,
     error: true,
     payload: err.message,
   };
 }
 
-function fetchWeeklyTrackChartSucceeded(response) {
+function fetchChartsForWeekSucceeded(response) {
   return {
-    type: FETCH_WEEKLY_TRACKS_SUCCESS,
+    type: FETCH_CHARTS_FOR_WEEK_SUCCESS,
     payload: response,
   };
 }
 
-export function fetchWeeklyTrackChart(from = null, to = null) {
+export function fetchChartsForWeek(from = null, to = null) {
   return (dispatch, getState) => {
-    dispatch(fetchWeeklyTrackChartRequest());
+    dispatch(fetchChartsForWeekRequest());
 
     const user = getState().lastfm.get('username');
     const options = { user, from, to };
 
-    return lastfm.user.getWeeklyTrackChart(options)
-      .then((response) => {
-        let tracks = [];
+    const getTracks = lastfm.user.getWeeklyTrackChart(options);
+    const getArtists = lastfm.user.getWeeklyArtistChart(options);
 
-        if (response.weeklytrackchart) {
-          tracks = response.weeklytrackchart.track;
-        }
-
-        dispatch(fetchWeeklyTrackChartSucceeded(tracks));
-      })
-      .catch((err) => {
-        dispatch(fetchWeeklyTrackChartFailed(err));
-      });
+    return Promise.all([getTracks, getArtists]).then(([tracksResponse, artistsResponse]) => {
+      dispatch(fetchChartsForWeekSucceeded({
+        artists: artistsResponse,
+        tracks: tracksResponse,
+      }));
+    }).catch((err) => {
+      dispatch(fetchChartsForWeekFailed(err));
+    });
   };
 }
 

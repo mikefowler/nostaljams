@@ -2,7 +2,7 @@ import { Record, List, OrderedMap } from 'immutable';
 import moment from 'moment';
 
 // ----------------------------------------------------------------------------
-// Chart
+// LastFM Charts
 // ----------------------------------------------------------------------------
 
 const ChartRecord = new Record({
@@ -23,14 +23,46 @@ export class Chart extends ChartRecord {
 
 }
 
-// ----------------------------------------------------------------------------
-// Chart Map
-// ----------------------------------------------------------------------------
-
 export const ChartMap = OrderedMap;
 
 // ----------------------------------------------------------------------------
-// User
+// LastFM Artists
+// ----------------------------------------------------------------------------
+
+const ArtistRecord = new Record({
+  id: undefined,
+  name: undefined,
+  playCount: undefined,
+  url: undefined,
+});
+
+export class Artist extends ArtistRecord {
+
+}
+
+export const ArtistMap = OrderedMap;
+
+// ----------------------------------------------------------------------------
+// LastFM Tracks
+// ----------------------------------------------------------------------------
+
+const TrackRecord = new Record({
+  id: undefined,
+  name: undefined,
+  artist: undefined,
+  playCount: undefined,
+  image: undefined,
+  url: undefined,
+});
+
+export class Track extends TrackRecord {
+
+}
+
+export const TrackMap = OrderedMap;
+
+// ----------------------------------------------------------------------------
+// Spotify User
 // ----------------------------------------------------------------------------
 
 const UserRecord = new Record({

@@ -1,3 +1,4 @@
+/* eslint-disable no-var, import/no-extraneous-dependencies, no-console */
 var path = require('path');
 var webpack = require('webpack');
 var express = require('express');
@@ -15,14 +16,14 @@ app.use(devMiddleware(compiler, {
 
 app.use(hotMiddleware(compiler));
 
-app.get('*', function (req, res) {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-app.listen(8080, function (err) {
+app.listen(8080, (err) => {
   if (err) {
-    return console.error(err);
+    console.error(err);
+  } else {
+    console.log('Listening at http://localhost:8080/');
   }
-
-  console.log('Listening at http://localhost:8080/');
 });

@@ -3,7 +3,7 @@
 body,
 input,
 button {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "-apple-system", "BlinkMacSystemFont", sans-serif;
   font-size: 19px;
   font-weight: 200;
 }
