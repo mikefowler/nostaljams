@@ -14,11 +14,11 @@ const ChartRecord = new Record({
 export class Chart extends ChartRecord {
 
   getStartDate() {
-    return moment(this.get('start'), 'x');
+    return moment(this.get('start') * 1000, 'x');
   }
 
   getEndDate() {
-    return moment(this.get('end'), 'x');
+    return moment(this.get('end') * 1000, 'x');
   }
 
 }
@@ -77,5 +77,38 @@ export class User extends UserRecord {
   getImage() {
     return this.get('images').first().get('url');
   }
+
+}
+
+// ----------------------------------------------------------------------------
+// Spotify Artist
+// ----------------------------------------------------------------------------
+
+const SpotifyArtistRecord = new Record({
+  id: undefined,
+  name: undefined,
+  href: undefined,
+  uri: undefined,
+});
+
+export class SpotifyArtist extends SpotifyArtistRecord {
+
+}
+
+// ----------------------------------------------------------------------------
+// Spotify Track
+// ----------------------------------------------------------------------------
+
+const SpotifyTrackRecord = new Record({
+  id: undefined,
+  name: undefined,
+  href: undefined,
+  previewUrl: undefined,
+  uri: undefined,
+  artist: undefined,
+  lastfmId: undefined,
+});
+
+export class SpotifyTrack extends SpotifyTrackRecord {
 
 }

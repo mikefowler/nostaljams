@@ -16,9 +16,9 @@ import {
 
 export function parseChart(chart) {
   return new Chart({
-    id: parseInt(chart.from, 10) * 1000,
-    start: parseInt(chart.from, 10) * 1000,
-    end: parseInt(chart.to, 10) * 1000,
+    id: parseInt(chart.from, 10),
+    start: parseInt(chart.from, 10),
+    end: parseInt(chart.to, 10),
   });
 }
 
@@ -41,14 +41,12 @@ function parseArtist(artist) {
   return new Artist({
     id: hash(artist.url),
     name: artist.name,
-    playCount: artist.playcount,
+    playCount: parseInt(artist.playcount, 10),
     url: artist.urll,
   });
 }
 
-export function parseArtists(response) {
-  const { artist: artists } = response;
-
+export function parseArtists(artists) {
   if (!artists) return new OrderedMap();
 
   return new ArtistMap(artists.map((artist) => {
@@ -76,15 +74,13 @@ function parseTrack(track) {
     id: hash(track.url),
     name: track.name,
     artist: track.artist['#text'],
-    playCount: track.playcount,
+    playCount: parseInt(track.playcount, 10),
     url: track.url,
     image: parseImages(track.image),
   });
 }
 
-export function parseTracks(response) {
-  const { track: tracks } = response;
-
+export function parseTracks(tracks) {
   if (!tracks) return new OrderedMap();
 
   return new TrackMap(tracks.map((track) => {

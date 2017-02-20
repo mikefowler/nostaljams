@@ -1,11 +1,13 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/constants';
+import moment from 'moment';
+
 import { SET_DATE } from '../actions/app';
 import { LOGOUT } from '../actions/spotify';
 
 const initialState = new Map({
   isBootstrapped: false,
-  selectedDate: null,
+  selectedDate: moment().valueOf(),
 });
 
 export default function reducer(state = initialState, action) {

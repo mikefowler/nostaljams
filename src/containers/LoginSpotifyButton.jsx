@@ -10,48 +10,20 @@ import { css, withStyles } from '../utils/themes/withStyles';
 // ----------------------------------------------------------------------------
 
 const propTypes = {
+  isLoggedIn: PropTypes.bool,
+  name: PropTypes.string,
   onPress: PropTypes.func,
   styles: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
+  isLoggedIn: false,
   onPress: () => {},
 };
 
-// ----------------------------------------------------------------------------
-// Component
-// ----------------------------------------------------------------------------
-
-function LoginButton({ onPress, styles }) {
-  return (
-    <button
-      {...css(styles.link)}
-      onClick={onPress}
-    >
-      Log in to Spotify
-    </button>
-  );
-}
-
-LoginButton.propTypes = propTypes;
-LoginButton.defaultProps = defaultProps;
-
-// ----------------------------------------------------------------------------
-// Stylesheet
-// ----------------------------------------------------------------------------
-
-export const LoginButtonWithStyles = withStyles(() => ({
-  link: {
-
-  },
-}))(LoginButton);
-
-// ----------------------------------------------------------------------------
-// Store connection
-// ----------------------------------------------------------------------------
-
 const mapStateToProps = state => ({
   isLoggedIn: state.spotify.get('isLoggedIn'),
+  name: state.spotify.getIn(['user', 'name']),
 });
 
 const mapDispatchToProps = () => ({
@@ -64,7 +36,47 @@ const mapDispatchToProps = () => ({
   },
 });
 
+// ----------------------------------------------------------------------------
+// Component
+// ----------------------------------------------------------------------------
+
+function LoginSpotifyButton({ name, isLoggedIn, onPress, styles }) {
+  if (isLoggedIn) {
+    return (
+      <div>
+        <p>Logged in to Spotify as {name}.</p>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      {...css(styles.link)}
+      onClick={onPress}
+    >
+      Log in to Spotify
+    </button>
+  );
+}
+
+LoginSpotifyButton.propTypes = propTypes;
+LoginSpotifyButton.defaultProps = defaultProps;
+
+// ----------------------------------------------------------------------------
+// Stylesheet
+// ----------------------------------------------------------------------------
+
+export const LoginSpotifyButtonWithStyles = withStyles(() => ({
+  link: {
+
+  },
+}))(LoginSpotifyButton);
+
+// ----------------------------------------------------------------------------
+// Store connection
+// ----------------------------------------------------------------------------
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LoginButtonWithStyles);
+)(LoginSpotifyButtonWithStyles);

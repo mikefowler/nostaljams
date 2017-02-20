@@ -1,5 +1,6 @@
 import qs from 'qs';
+import { SPOTIFY_OAUTH_URL } from './constants';
 
 export default function authenticateWithSpotify(options = {}) {
-  window.location = `https://accounts.spotify.com/authorize?${qs.stringify(options)}`;
+  window.location = `${SPOTIFY_OAUTH_URL}?${qs.stringify(options)}`;
 }

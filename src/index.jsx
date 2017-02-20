@@ -3,11 +3,12 @@ import 'isomorphic-fetch';
 import promise from 'es6-promise';
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
 import './styles/global.css';
 import configureStore from './store/configureStore';
-import Root from './containers/Root';
+import Router from './Router';
 
 // Initialize the Promise polyfill
 promise.polyfill();
@@ -18,20 +19,24 @@ const store = configureStore();
 // Initial render pass of the app into the DOM
 render(
   <AppContainer>
-    <Root store={store} />
+    <Provider store={store}>
+      <Router />
+    </Provider>
   </AppContainer>,
   document.getElementById('app'),
 );
 
 // Set up hot module reloading
 if (module.hot) {
-  module.hot.accept('./containers/Root', () => {
+  module.hot.accept('./Router', () => {
     // eslint-disable-next-line global-require
-    const Component = require('./containers/Root').default;
+    const Component = require('./Router').default;
 
     render(
       <AppContainer>
-        <Component store={store} />
+        <Provider store={store}>
+          <Component />
+        </Provider>
       </AppContainer>,
       document.getElementById('app'),
     );

@@ -1,53 +1,43 @@
-import { Map, List } from 'immutable';
+import { Map, OrderedMap } from 'immutable';
+import { handleActions } from 'redux-actions';
 
 import { ChartMap } from '../store/models';
-import parsers from '../store/parsers';
+import { parseTracks, parseArtists, parseCharts } from '../store/parsers/lastfm';
 
 import {
-  FETCH_WEEKLY_CHART_LIST_SUCCESS,
-  FETCH_CHARTS_FOR_WEEK_SUCCESS,
-  USERNAME_UPDATE,
-  USERNAME_RESET,
+  login,
+  logout,
+  fetchWeeklyChartList,
+  fetchChartsForWeek,
 } from '../actions/lastfm';
 
-import {
-  LOGOUT,
-} from '../actions/spotify';
-
 const initialState = new Map({
+  artists: new OrderedMap(),
   charts: new ChartMap(),
-  tracks: [],
-  username: '',
+  tracks: new OrderedMap(),
+  isLoggedIn: false,
+  sessionKey: null,
+  user: null,
 });
 
-export default function reducer(state = initialState, action) {
-  const { payload, type } = action;
+export default handleActions({
 
-  switch (type) {
+  [login]: (state, action) => state.merge({
+    isLoggedIn: true,
+    sessionKey: action.payload.key,
+    user: action.payload.name,
+  }),
 
-    case LOGOUT:
-      return initialState;
+  [logout]: () => initialState,
 
-    case USERNAME_UPDATE:
-      return state.set('username', payload);
+  [fetchWeeklyChartList]: (state, action) => state.set(
+    'charts',
+    parseCharts(action.payload),
+  ),
 
-    case USERNAME_RESET:
-      return state.merge({
-        username: null,
-        tracks: new List(),
-        charts: new ChartMap(),
-      });
+  [fetchChartsForWeek]: (state, action) => state.merge({
+    tracks: parseTracks(action.payload.tracks),
+    artists: parseArtists(action.payload.artists),
+  }),
 
-    case FETCH_WEEKLY_CHART_LIST_SUCCESS:
-      return state.set('charts', payload);
-
-    case FETCH_CHARTS_FOR_WEEK_SUCCESS:
-      return state.merge({
-        tracks: parsers.lastfm.parseTracks(payload.tracks),
-        artists: parsers.lastfm.parseArtists(payload.artists),
-      });
-
-    default:
-      return state;
-  }
-}
+}, initialState);

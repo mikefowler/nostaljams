@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import * as actions from '../actions/spotify';
+import { LASTFM_API_KEY, LASTFM_REDIRECT_URI } from '../utils/constants';
+import authenticateWithLastFM from '../utils/authenticateWithLastFM';
 import { css, withStyles } from '../utils/themes/withStyles';
 
 // ----------------------------------------------------------------------------
@@ -10,53 +10,73 @@ import { css, withStyles } from '../utils/themes/withStyles';
 // ----------------------------------------------------------------------------
 
 const propTypes = {
-  logout: PropTypes.func,
+  isLoggedIn: PropTypes.bool,
+  user: PropTypes.string,
+  onPress: PropTypes.func,
   styles: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
-  logout() {},
+  isLoggedIn: false,
+  onPress: () => {},
 };
+
+
+const mapStateToProps = state => ({
+  isLoggedIn: state.lastfm.get('isLoggedIn'),
+  user: state.lastfm.get('user'),
+});
+
+const mapDispatchToProps = () => ({
+  onPress() {
+    authenticateWithLastFM({
+      api_key: LASTFM_API_KEY,
+      cb: LASTFM_REDIRECT_URI,
+    });
+  },
+});
 
 // ----------------------------------------------------------------------------
 // Component
 // ----------------------------------------------------------------------------
 
-function LogoutButton({ logout, styles }) {
+function LoginLastFMButton({ isLoggedIn, user, onPress, styles }) {
+  if (isLoggedIn) {
+    return (
+      <div>
+        <p>Logged in to Last.FM as {user}.</p>
+      </div>
+    );
+  }
+
   return (
     <button
       {...css(styles.link)}
-      onClick={logout}
+      onClick={onPress}
     >
-      Log out of Spotify
+      Log in to Last.FM
     </button>
   );
 }
 
-LogoutButton.propTypes = propTypes;
-LogoutButton.defaultProps = defaultProps;
+LoginLastFMButton.propTypes = propTypes;
+LoginLastFMButton.defaultProps = defaultProps;
 
 // ----------------------------------------------------------------------------
 // Stylesheet
 // ----------------------------------------------------------------------------
 
-const LogoutButtonWithStyles = withStyles(() => ({
+export const LoginLastFMButtonWithStyles = withStyles(() => ({
   link: {
 
   },
-}))(LogoutButton);
+}))(LoginLastFMButton);
 
 // ----------------------------------------------------------------------------
 // Store connection
 // ----------------------------------------------------------------------------
 
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    logout: actions.logout,
-  }, dispatch)
-);
-
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
-)(LogoutButtonWithStyles);
+)(LoginLastFMButtonWithStyles);

@@ -1,30 +1,65 @@
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
+
+import ChartMap from '../models/ChartMap';
 
 const getSelectedDate = state => state.app.get('selectedDate');
 const getCharts = state => state.lastfm.get('charts');
+const getTracks = state => state.lastfm.get('tracks');
+const getArtists = state => state.lastfm.get('artists');
 
-export const getChartsForDate = createSelector(
+export const getChartForDate = createSelector(
   [getSelectedDate, getCharts],
   (date, charts) => {
     if (!date) return null;
 
-    // @TODO: allow this selector to specify a chart "delta" that
-    // would return multiple charts. i.e. specifying a delta of 2 would
-    // return up to 5 charts: the chart in range of getSelectedDate, and
-    // the two closest charts on either side of it.
-
-    return charts
-      .filter(chart => chart.get('start') <= date && chart.get('end') >= date)
-      .keySeq();
+    return charts.find(chart => chart.get('start') <= date && chart.get('end') >= date);
   },
 );
 
-export const getSelectedChart = createSelector(
-  [getCharts, getChartsForDate],
-  (allCharts, chartsInRange) => {
-    if (!chartsInRange || !chartsInRange.size) return null;
+export const getNearestChartsForDate = createSelector(
+  [getSelectedDate, getCharts],
+  (date, charts) => {
+    if (!date) return null;
 
-    const chartId = chartsInRange.first();
-    return allCharts.get(chartId);
+    const chartsByProximity = charts.reduce((selectedCharts, chart) => {
+      if (chart.get('start') > date) {
+        return selectedCharts.set(chart.get('id'), chart.get('start') - date);
+      } else if (chart.get('end') < date) {
+        return selectedCharts.set(chart.get('id'), date - chart.get('end'));
+      }
+
+      return selectedCharts;
+    }, new ChartMap());
+
+    const nearestCharts = chartsByProximity.sort();
+
+    return nearestCharts.take(2).map((proximity, id) => charts.get(id));
+  },
+);
+
+export const getTopTracks = createSelector(
+  [getTracks],
+  tracks => tracks.sort((a, b) => a.get('playCount') < b.get('playCount')).take(20),
+);
+
+export const getTopArtists = createSelector(
+  [getArtists],
+  artists => artists.sort((a, b) => a.get('playCount') < b.get('playCount')).take(20),
+);
+
+export const getPlaylistForChart = createSelector(
+  [getTracks, getTopArtists],
+  (tracks, topArtists) => {
+    let topTracks = new List();
+
+    topArtists.forEach((artist) => {
+      const artistName = artist.get('name');
+      const tracksByArtist = tracks.filter(t => t.get('artist') === artistName);
+      const topTracksForArtist = tracksByArtist.sort((a, b) => a.get('playCount') < b.get('playCount'));
+      topTracks = topTracks.push(topTracksForArtist.first());
+    });
+
+    return topTracks;
   },
 );

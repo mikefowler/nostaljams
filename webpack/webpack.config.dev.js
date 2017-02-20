@@ -4,12 +4,17 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   entry: {
     main: [
       'react-hot-loader/patch',
       'webpack-hot-middleware/client',
       path.resolve(__dirname, '../src/index.jsx'),
+    ],
+    auth: [
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client',
+      path.resolve(__dirname, '../src/auth.js'),
     ],
   },
   output: {
@@ -49,6 +54,6 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 };
