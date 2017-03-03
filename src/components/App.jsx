@@ -1,19 +1,6 @@
-import React, { PropTypes } from 'react';
+import { h } from 'preact';
 
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-// ----------------------------------------------------------------------------
-// Props
-// ----------------------------------------------------------------------------
-
-const propTypes = {
-  ...withStylesPropTypes,
-  isBootstrapped: PropTypes.bool,
-};
-
-const defaultProps = {
-  isBootstrapped: false,
-};
+import { css, withStyles } from '../utils/themes/withStyles';
 
 // ----------------------------------------------------------------------------
 // Component
@@ -26,9 +13,6 @@ function App({ children, styles }) {
     </div>
   );
 }
-
-App.propTypes = propTypes;
-App.defaultProps = defaultProps;
 
 // ----------------------------------------------------------------------------
 // Stylesheet

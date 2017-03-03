@@ -1,13 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-const propTypes = {
-  ...withStylesPropTypes,
-};
-
-const defaultProps = {
-
-};
+import { h, Component } from 'preact';
+import { css, withStyles } from '../utils/themes/withStyles';
 
 class CreatePlaylistPage extends Component {
 
@@ -30,9 +22,6 @@ class CreatePlaylistPage extends Component {
   }
 
 }
-
-CreatePlaylistPage.propTypes = propTypes;
-CreatePlaylistPage.defaultProps = defaultProps;
 
 export default withStyles(({ color }) => ({
   container: {

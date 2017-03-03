@@ -1,15 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
+import { h, Component } from 'preact';
+import { css, withStyles } from '../utils/themes/withStyles';
 
-const propTypes = {
-  ...withStylesPropTypes,
-};
-
-const defaultProps = {
-
-};
-
-class Template extends Component {
+class ViewPlaylistPage extends Component {
 
   constructor(props) {
     super(props);
@@ -24,18 +16,15 @@ class Template extends Component {
 
     return (
       <div {...css(styles.container)}>
-        Template
+        ViewPlaylistPage
       </div>
     );
   }
 
 }
 
-Template.propTypes = propTypes;
-Template.defaultProps = defaultProps;
-
 export default withStyles(({ color }) => ({
   container: {
     backgroundColor: color.white,
   },
-}))(Template);
+}))(ViewPlaylistPage);

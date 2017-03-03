@@ -1,8 +1,8 @@
-import React from 'react';
+import { h } from 'preact';
 
 import SelectChartContainer from '../containers/SelectChartContainer';
 
-export default function HomePage(props) {
+export default function HomePage() {
   return (
     <div>
       <SelectChartContainer />

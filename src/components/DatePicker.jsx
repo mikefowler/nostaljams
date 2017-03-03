@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import { h, Component } from 'preact';
 import moment from 'moment';
 
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
+import { css, withStyles } from '../utils/themes/withStyles';
 import getNumbersInRange from '../utils/getNumbersInRange';
 import getDatesForMonth from '../utils/getDatesForMonth';
 
@@ -9,16 +9,7 @@ const START_YEAR = 2002;
 const INITIAL_YEAR = moment().year();
 const POSSIBLE_YEARS = getNumbersInRange(START_YEAR, INITIAL_YEAR);
 
-const propTypes = {
-  ...withStylesPropTypes,
-  value: PropTypes.number,
-};
-
-const defaultProps = {
-  value: null,
-};
-
-class DatePicker extends React.Component {
+class DatePicker extends Component {
 
   constructor(props) {
     super(props);
@@ -84,9 +75,6 @@ class DatePicker extends React.Component {
   }
 
 }
-
-DatePicker.propTypes = propTypes;
-DatePicker.defaultProps = defaultProps;
 
 export default withStyles(() => ({
   container: {

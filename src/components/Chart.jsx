@@ -1,16 +1,6 @@
-import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import momentPropTypes from 'react-moment-proptypes';
+import { h } from 'preact';
 
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-const propTypes = {
-  ...withStylesPropTypes,
-  id: PropTypes.number,
-  start: momentPropTypes.momentObj,
-  end: momentPropTypes.momentObj,
-  number: PropTypes.number,
-};
+import { css, withStyles } from '../utils/themes/withStyles';
 
 function Chart({
   number,
@@ -20,16 +10,14 @@ function Chart({
   styles,
 }) {
   return (
-    <Link to={{ pathname: '/chart', query: { id } }}>
+    <a href={`/chart/${id}`}>
       <div {...css(styles.container)}>
         <legend>{number}</legend>
         <p>From {start.format('LL')} to {end.format('LL')}</p>
       </div>
-    </Link>
+    </a>
   );
 }
-
-Chart.propTypes = propTypes;
 
 export default withStyles(() => ({
   container: {

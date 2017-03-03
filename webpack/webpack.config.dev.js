@@ -6,16 +6,8 @@ var path = require('path');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    main: [
-      'react-hot-loader/patch',
-      'webpack-hot-middleware/client',
-      path.resolve(__dirname, '../src/index.jsx'),
-    ],
-    auth: [
-      'react-hot-loader/patch',
-      'webpack-hot-middleware/client',
-      path.resolve(__dirname, '../src/auth.js'),
-    ],
+    main: path.resolve(__dirname, '../src/index.jsx'),
+    auth: path.resolve(__dirname, '../src/auth.js'),
   },
   output: {
     path: path.resolve(__dirname, '../build'),
@@ -31,9 +23,6 @@ module.exports = {
       test: /.jsx?$/,
       use: [{
         loader: 'babel-loader',
-        options: {
-          presets: ['es2015', 'react'],
-        },
       }],
       exclude: [/node_modules/],
     }, {
@@ -53,7 +42,7 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
 };

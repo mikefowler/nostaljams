@@ -40,7 +40,9 @@ export default function reducer(state = initialState, action) {
           if (total === 0) return state;
 
           // @TODO: is there a way to do some smarter matching beyond the first result?
-          const track = items[0];
+          const track = items && items[0];
+
+          if (!track) return s;
 
           return s.setIn(
             ['tracks', track.id],

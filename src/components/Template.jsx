@@ -1,13 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-const propTypes = {
-  ...withStylesPropTypes,
-};
-
-const defaultProps = {
-
-};
+import { h, Component } from 'preact';
+import { css, withStyles } from '../utils/themes/withStyles';
 
 class Template extends Component {
 
@@ -30,9 +22,6 @@ class Template extends Component {
   }
 
 }
-
-Template.propTypes = propTypes;
-Template.defaultProps = defaultProps;
 
 export default withStyles(({ color }) => ({
   container: {

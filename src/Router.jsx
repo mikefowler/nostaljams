@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { IndexRoute, Router as ReactRouter, Route, hashHistory } from 'react-router';
+import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
+import { Router as PreactRouter } from 'preact-router';
+import { createHashHistory } from 'history';
 
 import { isLoggedIn } from './store/selectors';
+import AuthenticatedRouteContainer from './containers/AuthenticatedRouteContainer';
 import AppContainer from './containers/AppContainer';
 import HomePage from './components/HomePage';
 import ChartPageContainer from './containers/ChartPageContainer';
@@ -15,16 +17,6 @@ import ViewPlaylistPageContainer from './containers/ViewPlaylistPageContainer';
 // Props
 // ----------------------------------------------------------------------------
 
-const propTypes = {
-  isLoggedIn: PropTypes.bool,
-  isBootstrapped: PropTypes.bool,
-};
-
-const defaultProps = {
-  isBootstrapped: false,
-  isLoggedIn: false,
-};
-
 const mapStateToProps = state => ({
   isBootstrapped: state.app.get('isBootstrapped'),
   isLoggedIn: isLoggedIn(state),
@@ -34,7 +26,7 @@ const mapStateToProps = state => ({
 // Component
 // ----------------------------------------------------------------------------
 
-class Router extends React.Component {
+class Router extends Component {
 
   constructor(props) {
     super(props);
@@ -56,49 +48,40 @@ class Router extends React.Component {
     if (!isBootstrapped) return null;
 
     return (
-      <ReactRouter history={hashHistory}>
-        <Route path="/" component={AppContainer}>
+      <AppContainer>
+        <PreactRouter history={createHashHistory()}>
 
-          <IndexRoute
+          <AuthenticatedRouteContainer
+            path="/"
+            default
             component={HomePage}
-            onEnter={this.requireAuth}
           />
 
-          <Router
-            path="/chart"
+          <LoginPageContainer path="/login" />
+
+          <AuthenticatedRouteContainer
+            path="/chart/:chartId"
             component={ChartPageContainer}
-            onEnter={this.requireAuth}
           />
 
-          <Router
+          <AuthenticatedRouteContainer
             path="/playlist"
             component={CreatePlaylistPageContainer}
             onEnter={this.requireAuth}
           />
 
-          <Router
-            path="/playlist/:id"
+          <AuthenticatedRouteContainer
+            path="/playlist/:playlistId"
             component={ViewPlaylistPageContainer}
-            onEnter={this.requireAuth}
           />
 
-          <Router
-            path="/login"
-            component={LoginPageContainer}
-          />
+          <OAuthPageContainer path="/auth/:service" />
 
-          <Route
-            path="/auth/:service"
-            component={OAuthPageContainer}
-          />
-        </Route>
-      </ReactRouter>
+        </PreactRouter>
+      </AppContainer>
     );
   }
 }
-
-Router.propTypes = propTypes;
-Router.defaultProps = defaultProps;
 
 // ----------------------------------------------------------------------------
 // Store connection

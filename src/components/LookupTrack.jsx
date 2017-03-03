@@ -1,16 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-const propTypes = {
-  ...withStylesPropTypes,
-  lastFmId: PropTypes.string,
-  name: PropTypes.string,
-  artist: PropTypes.string,
-};
-
-const defaultProps = {
-
-};
+import { h, Component } from 'preact';
+import { css, withStyles } from '../utils/themes/withStyles';
 
 class LookupTrack extends Component {
 
@@ -42,9 +31,6 @@ class LookupTrack extends Component {
   }
 
 }
-
-LookupTrack.propTypes = propTypes;
-LookupTrack.defaultProps = defaultProps;
 
 export default withStyles(({ color }) => ({
   container: {

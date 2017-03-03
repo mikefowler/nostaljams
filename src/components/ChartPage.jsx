@@ -1,30 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import { List } from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { h, Component } from 'preact';
 
 import LookupTrack from '../containers/LookupTrackContainer';
-import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
-
-const propTypes = {
-  ...withStylesPropTypes,
-  fetchChartsForWeek: PropTypes.func.isRequired,
-  user: PropTypes.string,
-  charts: ImmutablePropTypes.orderedMap,
-  playlist: ImmutablePropTypes.list,
-};
-
-const defaultProps = {
-  tracksForTopArtists: new List(),
-};
+import { css, withStyles } from '../utils/themes/withStyles';
 
 class ChartPage extends Component {
 
   componentDidMount() {
-    const { charts, fetchChartsForWeek, user, location } = this.props;
-
-    const chartId = parseInt(location.query.id, 10);
-    const chart = charts.get(chartId);
+    const { charts, chartId, fetchChartsForWeek, user } = this.props;
+    const chart = charts.get(parseInt(chartId, 10));
     const from = chart.get('start');
     const to = chart.get('end');
 
@@ -40,11 +23,11 @@ class ChartPage extends Component {
         <h2>Playlist</h2>
 
         <ol>
-          {playlist.map(t => (
-            <li key={t.get('id')}>
+          {playlist.toArray().map(t => (
+            <li key={t.id}>
               <LookupTrack
-                name={t.get('name')}
-                artist={t.get('artist')}
+                name={t.name}
+                artist={t.artist}
                 onFoundTrack={() => {}}
               />
             </li>
@@ -55,9 +38,6 @@ class ChartPage extends Component {
   }
 
 }
-
-ChartPage.propTypes = propTypes;
-ChartPage.defaultProps = defaultProps;
 
 export default withStyles(({ color }) => ({
   container: {

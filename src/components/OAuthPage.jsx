@@ -1,29 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import { h, Component } from 'preact';
+import { route } from 'preact-router';
 import qs from 'qs';
-import { routerShape } from 'react-router';
 
 import Spotify from '../utils/spotify';
-
-// ----------------------------------------------------------------------------
-// Props
-// ----------------------------------------------------------------------------
-
-const propTypes = {
-  isLoggedIn: PropTypes.bool,
-  isLoggedInSpotify: PropTypes.bool,
-  isLoggedInLastFm: PropTypes.bool,
-  router: routerShape,
-  loginWithLastFM: PropTypes.func,
-  loginWithSpotify: PropTypes.func,
-  location: PropTypes.object,
-  params: PropTypes.shape({
-    service: PropTypes.string,
-  }),
-};
-
-const defaultProps = {
-  isLoggedIn: false,
-};
 
 // ----------------------------------------------------------------------------
 // Component
@@ -32,9 +11,9 @@ const defaultProps = {
 class OAuthPage extends Component {
 
   componentDidMount() {
-    const { location, params, router } = this.props;
-    const { service } = params;
-    const query = qs.parse(location.search.substring(1));
+    const { service } = this.props;
+    const search = window.location.hash.split('?')[1];
+    const query = qs.parse(search);
 
     const {
       access_token: accessToken,
@@ -55,16 +34,16 @@ class OAuthPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { router, isLoggedIn, isLoggedInLastFm, isLoggedInSpotify } = this.props;
+    const { isLoggedIn, isLoggedInLastFm, isLoggedInSpotify } = this.props;
 
     if (
       (isLoggedInLastFm && prevProps.isLoggedInLastFm !== isLoggedInLastFm) ||
       (isLoggedInSpotify && prevProps.isLoggedInSpotify !== isLoggedInSpotify)
     ) {
       if (isLoggedIn) {
-        router.replace('/');
+        route('/');
       } else {
-        router.replace('/login');
+        route('/login');
       }
     }
   }
@@ -75,8 +54,5 @@ class OAuthPage extends Component {
   }
 
 }
-
-OAuthPage.propTypes = propTypes;
-OAuthPage.defaultProps = defaultProps;
 
 export default OAuthPage;

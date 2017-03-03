@@ -1,5 +1,5 @@
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect } from 'preact-redux';
 
 import { fetchChartsForWeek } from '../actions/lastfm';
 import ChartPage from '../components/ChartPage';

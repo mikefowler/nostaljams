@@ -1,10 +1,9 @@
 import 'es5-shim';
 import 'isomorphic-fetch';
+import 'preact/devtools';
 import promise from 'es6-promise';
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { AppContainer } from 'react-hot-loader';
+import { h, render } from 'preact';
+import { Provider } from 'preact-redux';
 
 import './styles/global.css';
 import configureStore from './store/configureStore';
@@ -18,27 +17,8 @@ const store = configureStore();
 
 // Initial render pass of the app into the DOM
 render(
-  <AppContainer>
-    <Provider store={store}>
-      <Router />
-    </Provider>
-  </AppContainer>,
+  <Provider store={store}>
+    <Router />
+  </Provider>,
   document.getElementById('app'),
 );
-
-// Set up hot module reloading
-if (module.hot) {
-  module.hot.accept('./Router', () => {
-    // eslint-disable-next-line global-require
-    const Component = require('./Router').default;
-
-    render(
-      <AppContainer>
-        <Provider store={store}>
-          <Component />
-        </Provider>
-      </AppContainer>,
-      document.getElementById('app'),
-    );
-  });
-}

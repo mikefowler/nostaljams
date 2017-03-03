@@ -14,7 +14,7 @@ app.use(devMiddleware(compiler, {
   historyApiFallback: true,
 }));
 
-app.use(hotMiddleware(compiler));
+// app.use(hotMiddleware(compiler));
 
 app.get('/auth/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/auth.html'));

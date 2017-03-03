@@ -1,13 +1,7 @@
-import React, { PropTypes } from 'react';
-import { routerShape } from 'react-router';
+import { h } from 'preact';
 
 import LoginLastFMButton from '../containers/LoginLastFMButton';
 import LoginSpotifyButton from '../containers/LoginSpotifyButton';
-
-const propTypes = {
-  isLoggedIn: PropTypes.bool,
-  router: routerShape,
-};
 
 export default function LoginPage() {
   return (
@@ -17,5 +11,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-LoginPage.propTypes = propTypes;

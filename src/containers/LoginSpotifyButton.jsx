@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import { h } from 'preact';
+import { connect } from 'preact-redux';
 
 import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '../utils/constants';
 import authenticateWithSpotify from '../utils/authenticateWithSpotify';
@@ -8,18 +8,6 @@ import { css, withStyles } from '../utils/themes/withStyles';
 // ----------------------------------------------------------------------------
 // Props
 // ----------------------------------------------------------------------------
-
-const propTypes = {
-  isLoggedIn: PropTypes.bool,
-  name: PropTypes.string,
-  onPress: PropTypes.func,
-  styles: PropTypes.object.isRequired,
-};
-
-const defaultProps = {
-  isLoggedIn: false,
-  onPress: () => {},
-};
 
 const mapStateToProps = state => ({
   isLoggedIn: state.spotify.get('isLoggedIn'),
@@ -44,7 +32,7 @@ function LoginSpotifyButton({ name, isLoggedIn, onPress, styles }) {
   if (isLoggedIn) {
     return (
       <div>
-        <p>Logged in to Spotify as {name}.</p>
+        <p {...css(styles.text)}>Logged in to Spotify as {name}.</p>
       </div>
     );
   }
@@ -59,9 +47,6 @@ function LoginSpotifyButton({ name, isLoggedIn, onPress, styles }) {
   );
 }
 
-LoginSpotifyButton.propTypes = propTypes;
-LoginSpotifyButton.defaultProps = defaultProps;
-
 // ----------------------------------------------------------------------------
 // Stylesheet
 // ----------------------------------------------------------------------------
@@ -69,6 +54,10 @@ LoginSpotifyButton.defaultProps = defaultProps;
 export const LoginSpotifyButtonWithStyles = withStyles(() => ({
   link: {
 
+  },
+
+  text: {
+    color: 'blue',
   },
 }))(LoginSpotifyButton);
 

@@ -1,8 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-
-const propTypes = {
-  logout: PropTypes.func.isRequired,
-};
+import { h, Component } from 'preact';
 
 export default class LogoutPage extends Component {
 
@@ -17,5 +13,3 @@ export default class LogoutPage extends Component {
   }
 
 }
-
-LogoutPage.propTypes = propTypes;

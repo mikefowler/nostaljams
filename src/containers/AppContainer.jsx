@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect } from 'preact-redux';
 import App from '../components/App';
 
 import { isLoggedIn } from '../store/selectors';

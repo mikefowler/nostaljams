@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+import { h } from 'preact';
+import { connect } from 'preact-redux';
 
 import { LASTFM_API_KEY, LASTFM_REDIRECT_URI } from '../utils/constants';
 import authenticateWithLastFM from '../utils/authenticateWithLastFM';
@@ -8,19 +8,6 @@ import { css, withStyles } from '../utils/themes/withStyles';
 // ----------------------------------------------------------------------------
 // Props
 // ----------------------------------------------------------------------------
-
-const propTypes = {
-  isLoggedIn: PropTypes.bool,
-  user: PropTypes.string,
-  onPress: PropTypes.func,
-  styles: PropTypes.object.isRequired,
-};
-
-const defaultProps = {
-  isLoggedIn: false,
-  onPress: () => {},
-};
-
 
 const mapStateToProps = state => ({
   isLoggedIn: state.lastfm.get('isLoggedIn'),
@@ -58,9 +45,6 @@ function LoginLastFMButton({ isLoggedIn, user, onPress, styles }) {
     </button>
   );
 }
-
-LoginLastFMButton.propTypes = propTypes;
-LoginLastFMButton.defaultProps = defaultProps;
 
 // ----------------------------------------------------------------------------
 // Stylesheet
