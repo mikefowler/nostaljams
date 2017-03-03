@@ -31,7 +31,7 @@ class SelectChart extends Component {
     const { charts, styles } = this.props;
     return (
       <div {...css(styles.container)}>
-        {charts.map(c => (
+        {charts.valueSeq().map(c => (
           <Chart
             key={c.get('id')}
             id={c.get('id')}

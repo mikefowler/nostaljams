@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IndexRoute, Router as ReactRouter, Route, hashHistory } from 'react-router';
 
+import { isLoggedIn } from './store/selectors';
 import AppContainer from './containers/AppContainer';
 import HomePage from './components/HomePage';
 import ChartPageContainer from './containers/ChartPageContainer';
@@ -26,36 +27,74 @@ const defaultProps = {
 
 const mapStateToProps = state => ({
   isBootstrapped: state.app.get('isBootstrapped'),
-  isLoggedIn: state.lastfm.get('isLoggedIn') && state.spotify.get('isLoggedIn'),
+  isLoggedIn: isLoggedIn(state),
 });
 
 // ----------------------------------------------------------------------------
 // Component
 // ----------------------------------------------------------------------------
 
-function Router({ isBootstrapped, isLoggedIn }) {
-  if (!isBootstrapped) return null;
+class Router extends React.Component {
 
-  const requireAuth = (nextState, replace) => {
-    if (!isLoggedIn) {
+  constructor(props) {
+    super(props);
+
+    this.requireAuth = this.requireAuth.bind(this);
+  }
+
+  requireAuth(nextState, replace) {
+    if (!this.props.isLoggedIn) {
       replace({
         pathname: '/login',
       });
     }
-  };
+  }
 
-  return (
-    <ReactRouter history={hashHistory}>
-      <Route path="/" component={AppContainer}>
-        <IndexRoute component={HomePage} onEnter={requireAuth} />
-        <Router path="/chart" component={ChartPageContainer} onEnter={requireAuth} />
-        <Router path="/playlist" component={CreatePlaylistPageContainer} onEnter={requireAuth} />
-        <Router path="/playlist/:id" component={ViewPlaylistPageContainer} onEnter={requireAuth} />
-        <Router path="/login" component={LoginPageContainer} />
-        <Route path="/auth/:service" component={OAuthPageContainer} />
-      </Route>
-    </ReactRouter>
-  );
+  render() {
+    const { isBootstrapped } = this.props;
+
+    if (!isBootstrapped) return null;
+
+    return (
+      <ReactRouter history={hashHistory}>
+        <Route path="/" component={AppContainer}>
+
+          <IndexRoute
+            component={HomePage}
+            onEnter={this.requireAuth}
+          />
+
+          <Router
+            path="/chart"
+            component={ChartPageContainer}
+            onEnter={this.requireAuth}
+          />
+
+          <Router
+            path="/playlist"
+            component={CreatePlaylistPageContainer}
+            onEnter={this.requireAuth}
+          />
+
+          <Router
+            path="/playlist/:id"
+            component={ViewPlaylistPageContainer}
+            onEnter={this.requireAuth}
+          />
+
+          <Router
+            path="/login"
+            component={LoginPageContainer}
+          />
+
+          <Route
+            path="/auth/:service"
+            component={OAuthPageContainer}
+          />
+        </Route>
+      </ReactRouter>
+    );
+  }
 }
 
 Router.propTypes = propTypes;

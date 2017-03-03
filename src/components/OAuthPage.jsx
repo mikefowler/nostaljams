@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import qs from 'qs';
 import { routerShape } from 'react-router';
 
@@ -9,6 +9,9 @@ import Spotify from '../utils/spotify';
 // ----------------------------------------------------------------------------
 
 const propTypes = {
+  isLoggedIn: PropTypes.bool,
+  isLoggedInSpotify: PropTypes.bool,
+  isLoggedInLastFm: PropTypes.bool,
   router: routerShape,
   loginWithLastFM: PropTypes.func,
   loginWithSpotify: PropTypes.func,
@@ -18,42 +21,62 @@ const propTypes = {
   }),
 };
 
+const defaultProps = {
+  isLoggedIn: false,
+};
+
 // ----------------------------------------------------------------------------
 // Component
 // ----------------------------------------------------------------------------
 
-function OAuthPage(props) {
-  const { location, params, router } = props;
-  const { service } = params;
-  const query = qs.parse(location.search.substring(1));
+class OAuthPage extends Component {
 
-  const {
-    access_token: accessToken,
-    token,
-  } = query;
+  componentDidMount() {
+    const { location, params, router } = this.props;
+    const { service } = params;
+    const query = qs.parse(location.search.substring(1));
 
-  debugger;
+    const {
+      access_token: accessToken,
+      token,
+    } = query;
 
-  switch (service) {
-    case 'spotify':
-      Spotify.setAccessToken(accessToken);
-      props.loginWithSpotify({ accessToken }).then(() => {
-        router.replace('/');
-      });
-      break;
-    case 'lastfm':
-      props.loginWithLastFM({ token }).then(() => {
-        router.replace('/');
-      });
-      break;
-    default:
-      break;
+    switch (service) {
+      case 'spotify':
+        Spotify.setAccessToken(accessToken);
+        this.props.loginWithSpotify({ accessToken });
+        break;
+      case 'lastfm':
+        this.props.loginWithLastFM({ token });
+        break;
+      default:
+        break;
+    }
   }
 
-  // @TODO: replace with loading component
-  return <p>Logging in.</p>;
+  componentDidUpdate(prevProps) {
+    const { router, isLoggedIn, isLoggedInLastFm, isLoggedInSpotify } = this.props;
+
+    if (
+      (isLoggedInLastFm && prevProps.isLoggedInLastFm !== isLoggedInLastFm) ||
+      (isLoggedInSpotify && prevProps.isLoggedInSpotify !== isLoggedInSpotify)
+    ) {
+      if (isLoggedIn) {
+        router.replace('/');
+      } else {
+        router.replace('/login');
+      }
+    }
+  }
+
+  render() {
+    // @TODO: replace with loading component
+    return <p>Logging in.</p>;
+  }
+
 }
 
 OAuthPage.propTypes = propTypes;
+OAuthPage.defaultProps = defaultProps;
 
 export default OAuthPage;

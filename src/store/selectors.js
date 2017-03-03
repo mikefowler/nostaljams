@@ -3,6 +3,8 @@ import { List } from 'immutable';
 
 import ChartMap from '../models/ChartMap';
 
+export const isLoggedIn = state => state.lastfm.get('isLoggedIn') && state.spotify.get('isLoggedIn');
+
 const getSelectedDate = state => state.app.get('selectedDate');
 const getCharts = state => state.lastfm.get('charts');
 const getTracks = state => state.lastfm.get('tracks');

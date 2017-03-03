@@ -1,14 +1,14 @@
 import { Map, OrderedMap } from 'immutable';
-import { handleActions } from 'redux-actions';
+import { handle } from 'redux-pack';
 
 import { ChartMap } from '../store/models';
 import { parseTracks, parseArtists, parseCharts } from '../store/parsers/lastfm';
 
 import {
-  login,
-  logout,
-  fetchWeeklyChartList,
-  fetchChartsForWeek,
+  LOGIN,
+  LOGOUT,
+  FETCH_WEEKLY_CHART_LIST,
+  FETCH_CHARTS_FOR_WEEK,
 } from '../actions/lastfm';
 
 const initialState = new Map({
@@ -18,26 +18,47 @@ const initialState = new Map({
   isLoggedIn: false,
   sessionKey: null,
   user: null,
+
+  isLoggingIn: false,
+  isFetchingWeeklyChartList: false,
+  isFetchingChartsForWeek: false,
 });
 
-export default handleActions({
+export default function reducer(state = initialState, action) {
+  const { type, payload } = action;
 
-  [login]: (state, action) => state.merge({
-    isLoggedIn: true,
-    sessionKey: action.payload.key,
-    user: action.payload.name,
-  }),
+  switch (type) {
 
-  [logout]: () => initialState,
+    case LOGIN:
+      return handle(state, action, {
+        success: s => s.merge({
+          isLoggedIn: true,
+          sessionKey: payload.session.key,
+          user: payload.session.name,
+        }),
+      });
 
-  [fetchWeeklyChartList]: (state, action) => state.set(
-    'charts',
-    parseCharts(action.payload),
-  ),
+    case LOGOUT:
+      return initialState;
 
-  [fetchChartsForWeek]: (state, action) => state.merge({
-    tracks: parseTracks(action.payload.tracks),
-    artists: parseArtists(action.payload.artists),
-  }),
+    case FETCH_WEEKLY_CHART_LIST:
+      return handle(state, action, {
+        start: s => s.set('isFetchingWeeklyChartList', true),
+        finish: s => s.set('isFetchingWeeklyChartList', false),
+        success: s => s.set('charts', parseCharts(action.payload.weeklychartlist)),
+      });
 
-}, initialState);
+    case FETCH_CHARTS_FOR_WEEK:
+      return handle(state, action, {
+        start: s => s.set('isFetchingChartsForWeek', true),
+        finish: s => s.set('isFetchingWeeklyChartList', false),
+        success: s => s.merge({
+          tracks: parseTracks(action.payload[0].weeklytrackchart.track),
+          artists: parseArtists(action.payload[1].weeklyartistchart.artist),
+        }),
+      });
+
+    default:
+      return state;
+  }
+}

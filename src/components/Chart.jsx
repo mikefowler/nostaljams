@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import moment from 'moment';
+import momentPropTypes from 'react-moment-proptypes';
 
 import { css, withStyles, withStylesPropTypes } from '../utils/themes/withStyles';
 
 const propTypes = {
   ...withStylesPropTypes,
   id: PropTypes.number,
-  start: PropTypes.number,
-  end: PropTypes.number,
+  start: momentPropTypes.momentObj,
+  end: momentPropTypes.momentObj,
   number: PropTypes.number,
 };
 
