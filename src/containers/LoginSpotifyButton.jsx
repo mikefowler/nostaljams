@@ -1,9 +1,9 @@
 import { h } from 'preact';
 import { connect } from 'preact-redux';
 
+import Button from '../components/Button';
 import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '../utils/constants';
 import authenticateWithSpotify from '../utils/authenticateWithSpotify';
-import { css, withStyles } from '../utils/themes/withStyles';
 
 // ----------------------------------------------------------------------------
 // Props
@@ -28,38 +28,21 @@ const mapDispatchToProps = () => ({
 // Component
 // ----------------------------------------------------------------------------
 
-function LoginSpotifyButton({ name, isLoggedIn, onPress, styles }) {
+function LoginSpotifyButton({ name, isLoggedIn, onPress }) {
   if (isLoggedIn) {
     return (
       <div>
-        <p {...css(styles.text)}>Logged in to Spotify as {name}.</p>
+        <p>Logged in to Spotify as {name}.</p>
       </div>
     );
   }
 
   return (
-    <button
-      {...css(styles.link)}
-      onClick={onPress}
-    >
+    <Button onClick={onPress}>
       Log in to Spotify
-    </button>
+    </Button>
   );
 }
-
-// ----------------------------------------------------------------------------
-// Stylesheet
-// ----------------------------------------------------------------------------
-
-export const LoginSpotifyButtonWithStyles = withStyles(() => ({
-  link: {
-
-  },
-
-  text: {
-    color: 'blue',
-  },
-}))(LoginSpotifyButton);
 
 // ----------------------------------------------------------------------------
 // Store connection
@@ -68,4 +51,4 @@ export const LoginSpotifyButtonWithStyles = withStyles(() => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LoginSpotifyButtonWithStyles);
+)(LoginSpotifyButton);
