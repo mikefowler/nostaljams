@@ -1,9 +1,10 @@
 {
+  "sourceMaps": true,
   "presets": ["airbnb"],
   "plugins": [
     ["transform-react-jsx", {
       "pragma": "h"
     }],
-    "transform-async-to-generator"
+    "inline-react-svg"
   ]
 }

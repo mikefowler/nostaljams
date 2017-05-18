@@ -2,17 +2,13 @@ import { h } from 'preact';
 import { connect } from 'preact-redux';
 
 import Button from '../components/Button';
+
 import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '../utils/constants';
 import authenticateWithSpotify from '../utils/authenticateWithSpotify';
 
 // ----------------------------------------------------------------------------
 // Props
 // ----------------------------------------------------------------------------
-
-const mapStateToProps = state => ({
-  isLoggedIn: state.spotify.get('isLoggedIn'),
-  name: state.spotify.getIn(['user', 'name']),
-});
 
 const mapDispatchToProps = () => ({
   onPress() {
@@ -28,17 +24,12 @@ const mapDispatchToProps = () => ({
 // Component
 // ----------------------------------------------------------------------------
 
-function LoginSpotifyButton({ name, isLoggedIn, onPress }) {
-  if (isLoggedIn) {
-    return (
-      <div>
-        <p>Logged in to Spotify as {name}.</p>
-      </div>
-    );
-  }
-
+function LoginSpotifyButton({ onPress }) {
   return (
-    <Button onClick={onPress}>
+    <Button
+      block
+      onClick={onPress}
+    >
       Log in to Spotify
     </Button>
   );
@@ -49,6 +40,6 @@ function LoginSpotifyButton({ name, isLoggedIn, onPress }) {
 // ----------------------------------------------------------------------------
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps,
 )(LoginSpotifyButton);

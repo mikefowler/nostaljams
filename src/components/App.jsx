@@ -1,25 +1,9 @@
 import { h } from 'preact';
+import styled from 'styled-components';
 
-import { css, withStyles } from '../utils/themes/withStyles';
-
-// ----------------------------------------------------------------------------
-// Component
-// ----------------------------------------------------------------------------
-
-function App({ children, styles }) {
-  return (
-    <div {...css(styles.container)}>
-      {children}
-    </div>
-  );
-}
-
-// ----------------------------------------------------------------------------
-// Stylesheet
-// ----------------------------------------------------------------------------
-
-export default withStyles(() => ({
-  container: {
-
-  },
-}))(App);
+export default styled.div`
+  background-image: ${props => props.theme.gradient.primary};
+  min-height: 100vh;
+  min-width: 320px;
+  width: 100%;
+`;

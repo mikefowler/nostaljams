@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 
-import LookupTrack from '../containers/LookupTrackContainer';
+import LookupTrack from '../containers/LookupTrack';
 import { css, withStyles } from '../utils/themes/withStyles';
 
 class ChartPage extends Component {

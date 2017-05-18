@@ -12,11 +12,14 @@ module.exports = {
 
   context: path.resolve(__dirname, 'src'),
 
-  entry: ['./index.jsx', './auth.js'],
+  entry: {
+    app: './index.jsx',
+    auth: './auth.js',
+  },
 
   output: {
     path: path.resolve(__dirname, 'build'),
-    publicPath: '/assets',
+    publicPath: '/',
     filename: '[name].js',
     chunkFilename: '[name]-[chunkhash].js',
   },
@@ -56,21 +59,54 @@ module.exports = {
         ],
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
+        test: /\.(xml|txt|md)$/,
+        loader: 'raw-loader',
+      },
+      {
         test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i,
         loader: ENV === 'production' ? 'file-loader' : 'url-loader',
       },
     ],
   },
 
-  devtool: ENV === 'production' ? 'source-map' : 'cheap-module-eval-source-map',
-
   plugins: ([
+
+    new webpack.NoEmitOnErrorsPlugin(),
 
     new webpack.optimize.OccurrenceOrderPlugin(),
 
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(ENV),
+    }),
 
-    new webpack.NoEmitOnErrorsPlugin(),
+    new ExtractTextPlugin({
+      filename: 'styles-[contenthash].css',
+      disable: ENV !== 'production',
+    }),
+
+    new HtmlWebpackPlugin({
+      template: './templates/index.html',
+      excludeChunks: ['auth'],
+      minify: { collapseWhitespace: true },
+    }),
+
+    new HtmlWebpackPlugin({
+      chunks: ['auth'],
+      template: './templates/auth.html',
+      filename: 'auth/spotify.html',
+      minify: { collapseWhitespace: true },
+    }),
+
+    new HtmlWebpackPlugin({
+      chunks: ['auth'],
+      template: './templates/auth.html',
+      filename: 'auth/lastfm.html',
+      minify: { collapseWhitespace: true },
+    }),
 
   ]).concat(ENV === 'production' ? [
 
@@ -81,48 +117,34 @@ module.exports = {
 
     new CleanWebpackPlugin(['build']),
 
-    new webpack.optimize.OccurrenceOrderPlugin(),
-
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
-
-    new webpack.NoEmitOnErrorsPlugin(),
-
-    // new webpack.optimize.UglifyJsPlugin({
-    //   output: {
-    //     comments: false,
-    //     compress: {
-    //       warnings: false,
-    //       conditionals: true,
-    //       unused: true,
-    //       comparisons: true,
-    //       sequences: true,
-    //       dead_code: true,
-    //       evaluate: true,
-    //       if_return: true,
-    //       join_vars: true,
-    //       negate_iife: false,
-    //     },
-    //   },
-    // }),
-
-    new ExtractTextPlugin('styles-[contenthash].css'),
-
-    new HtmlWebpackPlugin({
-      template: './templates/index.html',
-      excludeChunks: ['auth'],
-    }),
-
-    new HtmlWebpackPlugin({
-      chunks: ['auth'],
-      template: './templates/auth.html',
-      filename: 'oauth/spotify.html',
-    }),
-
-    new HtmlWebpackPlugin({
-      chunks: ['auth'],
-      template: './templates/auth.html',
-      filename: 'oauth/lastfm.html',
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        conditionals: true,
+        unused: true,
+        comparisons: true,
+        sequences: true,
+        dead_code: true,
+        evaluate: true,
+        if_return: true,
+        join_vars: true,
+        negate_iife: false,
+      },
+      comments: false,
     }),
 
   ] : []),
+
+  stats: { colors: true },
+
+  devtool: ENV === 'production' ? 'source-map' : 'cheap-module-eval-source-map',
+
+  devServer: {
+    port: process.env.PORT || 8080,
+    host: 'localhost',
+    colors: true,
+    publicPath: '/',
+    contentBase: './src',
+    historyApiFallback: true,
+  },
 };

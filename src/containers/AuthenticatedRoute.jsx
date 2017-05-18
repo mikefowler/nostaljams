@@ -14,7 +14,9 @@ class AuthenticatedRoute extends Component {
     const { isLoggedIn: shouldRenderRoute } = this.props;
 
     if (!shouldRenderRoute) {
-      route('/login');
+      setTimeout(() => {
+        route('/login');
+      }, 0);
     }
   }
 

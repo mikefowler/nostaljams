@@ -1,11 +1,33 @@
 import { h, Component } from 'preact';
+import { bindActionCreators } from 'redux';
+import { connect } from 'preact-redux';
 import { route } from 'preact-router';
 import qs from 'qs';
 
 import Page from '../components/Page';
 import Centered from '../components/Centered';
 import Loader from '../components/Loader';
+import * as selectors from '../store/selectors';
+import * as SpotifyActions from '../actions/spotify';
+import * as LastFmActions from '../actions/lastfm';
 import Spotify from '../utils/spotify';
+
+// ----------------------------------------------------------------------------
+// Props
+// ----------------------------------------------------------------------------
+
+const mapStateToProps = state => ({
+  isLoggedIn: selectors.isLoggedIn(state),
+  isLoggedInSpotify: state.spotify.get('isLoggedIn'),
+  isLoggedInLastFm: state.lastfm.get('isLoggedIn'),
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    loginWithSpotify: SpotifyActions.login,
+    loginWithLastFM: LastFmActions.login,
+  }, dispatch)
+);
 
 // ----------------------------------------------------------------------------
 // Component
@@ -50,9 +72,9 @@ class OAuthPage extends Component {
       (isLoggedInSpotify && prevProps.isLoggedInSpotify !== isLoggedInSpotify)
     ) {
       if (isLoggedIn) {
-        route('/');
+        route('/', true);
       } else {
-        route('/login');
+        route('/login', true);
       }
     }
   }
@@ -69,4 +91,7 @@ class OAuthPage extends Component {
 
 }
 
-export default OAuthPage;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OAuthPage);
